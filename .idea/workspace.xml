@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92ada7ed-24a9-49f2-98c2-9f46e97c9bdc" name="Changes" comment="Django Initialisation" />
+    <list default="true" id="92ada7ed-24a9-49f2-98c2-9f46e97c9bdc" name="Changes" comment="Django Initialisation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +19,9 @@
   "associatedIndex": 0
 }]]></component>
   <component name="ProjectId" id="32rGZqF0c1QrJ1jEQCbTHupzADH" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -46,15 +51,15 @@
       <window_info id="Pull Requests" />
       <window_info id="Django.Structure" side_tool="true" />
       <window_info id="Learn" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23776042" />
-      <window_info active="true" id="Commit" order="1" visible="true" weight="0.23776042" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18567708" />
+      <window_info id="Commit" order="1" weight="0.18567708" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
       <window_info anchor="bottom" id="TODO" />
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="HfCacheToolWindow" />
-      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="0" weight="0.7520852" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" />
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.7520852" />
@@ -114,7 +119,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758171337150</updated>
-      <workItem from="1758171338156" duration="647000" />
+      <workItem from="1758171338156" duration="1331000" />
     </task>
     <task id="LOCAL-00001" summary="Django Initialisation">
       <option name="closed" value="true" />
@@ -140,11 +145,30 @@
       <option name="project" value="LOCAL" />
       <updated>1758171984760</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Django Initialisation">
+      <option name="closed" value="true" />
+      <created>1758172008601</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1758172008601</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Django Initialisation" />
