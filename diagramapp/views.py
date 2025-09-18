@@ -11,6 +11,5 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def generate(request):
-
     return JsonResponse({"output": "bar"})
 # Create your views here.
