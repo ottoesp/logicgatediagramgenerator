@@ -1,7 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 
 def index(request):
-    return HttpResponse("Hello World! We at the index ovah here")
+    template = loader.get_template('index.html')
+    context = {
+        'fruits': ['Apple', 'Banana', 'Cherry']
+    }
+    return HttpResponse(template.render(context, request))
 
+def clickybutton(request):
+    return HttpResponse("Clicky Button")
 # Create your views here.

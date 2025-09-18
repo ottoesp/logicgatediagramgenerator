@@ -18,6 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path("diagramapp/", include("diagramapp.urls")), # Include means redirect if suffix matches
+    path("", include("diagramapp.urls")), # Include means redirect if suffix matches
     path('admin/', admin.site.urls),
 ]
