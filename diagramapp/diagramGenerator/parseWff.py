@@ -1,6 +1,6 @@
 from connectives import connectives, Connective, Variable
 from typing import Tuple
-from logicalElementTree import LogElNode
+from logicalElementTree import DiagramNode, DiagramDag, VariableNode
 import copy
 import re
 
@@ -16,7 +16,7 @@ def strip_outer_brackets(wff):
 def get_prefix_connective(wff) -> Connective:
     for connective in connectives:
         if wff[0:len(connective.name)] == connective.name:
-            return copy.deepcopy(connective)
+            return copy.deepcopy(connective) # Try remove this
     return Connective()
 
 def split_at_connective(wff: str) -> Tuple[str, Connective, str]:
@@ -51,7 +51,7 @@ def split_at_connective(wff: str) -> Tuple[str, Connective, str]:
     left_formula = wff[0:lb_idx]
     right_formula = wff[lb_idx + len(lb_connective.name):]
 
-    return left_formula, lb_connective, right_formula
+    return left_formula, lb_connective.name, right_formula
 
 def is_valid_formula(formula):
     """Checks if a string is a valid propositional logic formula."""
@@ -60,23 +60,23 @@ def is_valid_formula(formula):
     pattern = r"^(?:\s*not\s*)?(?:[A-Z]|\((?:\s*not\s*)?[A-Z]\s+(?:and|or)\s+(?:\s*not\s*)?[A-Z]\s*\))(?:\s+(?:and|or)\s+(?:\s*not\s*)?(?:[A-Z]|\((?:\s*not\s*)?[A-Z]\s+(?:and|or)\s+(?:\s*not\s*)?[A-Z]\s*\)))*$"
     return re.fullmatch(pattern, formula) is not None
 
-def parse_wff(wff, tree):
+def parse_wff(wff, dag: DiagramDag, parent_node):
     wff = strip_outer_brackets(wff)
     if not is_valid_formula(wff):
         raise Exception(f'{wff} is not a wff')
 
     if len(wff) <= 1:
-        tree.set_data(Variable(wff))
-        return tree
+        # Only a single variable left
+        dag.insert_node(VariableNode(wff), parent_node)
+        return dag
 
     left_formula, root_log_el, right_formula = split_at_connective(wff)
-    tree.set_data(root_log_el)
+    new_node = DiagramNode(root_log_el)
+    dag.insert_node(new_node, parent_node)
 
     if left_formula:
-        tree.left = LogElNode()
-        parse_wff(left_formula, tree.left)
+        parse_wff(left_formula, dag, new_node)
     if right_formula:
-        tree.right = LogElNode()
-        parse_wff(right_formula, tree.right)
+        parse_wff(right_formula, dag, new_node)
 
-    return tree
+    return dag
