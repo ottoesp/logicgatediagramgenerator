@@ -27,7 +27,7 @@ class DiagramDag:
         self.adj = defaultdict(list)
 
     def get_node_ids(self):
-        return map(lambda node: node.get_id(), self.nodes)
+        return set(map(lambda node: node.get_id(), self.nodes))
 
     def insert_node(self, node: DiagramNode, parent_node: DiagramNode = None):
         if node.get_id() not in self.get_node_ids():
@@ -74,9 +74,6 @@ class DiagramDag:
                 visit(node)
 
         return l
-
-
-
 
 
 
