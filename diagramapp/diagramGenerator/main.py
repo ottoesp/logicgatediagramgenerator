@@ -21,4 +21,4 @@ def generate_diagram(wff):
 # generate_diagram("A")
 #
 generate_diagram("(A or not (A and B))")
-generate_diagram("(A or not (A and B)) or (C and not B)")
+# generate_diagram("( (A or not (A and B)) or (C and not B))")

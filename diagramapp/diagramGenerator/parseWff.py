@@ -6,11 +6,19 @@ import re
 
 def strip_outer_brackets(wff):
     wff = wff.strip()
-    while wff[0] == '(':
-        if wff[len(wff) - 1] == ')':
-            wff = wff[1:len(wff) - 1]
-        else:
-            break
+    if len(wff) >= 2 and wff[0] == '(' and wff[-1] == ')':
+        bracket_depth = 0
+        for i, char in enumerate(wff):
+            if char == '(':
+                bracket_depth += 1
+            elif char == ')':
+                bracket_depth -= 1
+                if (bracket_depth == 0) and i != len(wff) - 1:
+                    # The bracket in the first position is closing before the end
+                    return wff
+        # Strip brackets and go again in case they are double layered
+        return strip_outer_brackets(wff[1:-1])
+    # No bracket in first position so leave unchanged
     return wff
 
 def get_prefix_connective(wff) -> Connective:
