@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from dag import DiagramDag, get_adjacency_list
+
 
 def nodes_without_incoming_edge(nodes: set[str], edges: set[tuple[str, str]]):
     return set(nodes).difference(set(map(lambda edge: edge[1], edges)))
@@ -83,3 +85,69 @@ def kahns_topological_sort(nodes: set[str], edges: set[tuple[str, str]]):
             if not node_has_incoming_edge(m, remaining_edges):
                 s.add(m)
     return l
+
+def dfs_topological_sort(nodes, edges):
+    l = list()
+    visited = set()
+
+    adj = get_adjacency_list(nodes, edges)
+
+    def visit(n):
+        if n in visited:
+            return
+
+        for m in adj[n]:
+            visit(m)
+
+        visited.add(n)
+        l.append(n)
+
+    for node in nodes:
+        if node not in visited:
+            visit(node)
+    l.reverse()
+    return l
+
+def transitive_reduction(dag: DiagramDag):
+    topo = dfs_topological_sort(dag.get_node_ids(), dag.edges)
+
+    # Start with all edges in the reduction
+    edges_reduced = set(dag.edges)
+
+    # Instantiate a dictionary mapping each node to known reachable nodes (initially empty set)
+    reachable: dict[str, set[str]] = {u: set() for u in dag.get_node_ids()}
+
+    adj = get_adjacency_list(dag.get_node_ids(), dag.edges)
+
+    # Go in reverse topological order so we find the longest paths
+    for u in reversed(topo):
+        # --- Start of new, corrected logic for each node u ---
+
+        # Pass 1: For each neighbor v, determine the complete set of nodes reachable
+        # from u if one were to traverse the edge (u, v).
+        reach_via = {v: {v} | reachable[v] for v in adj[u]}
+
+        # Pass 2: For each edge (u, v), check if v is reachable from u via any *other*
+        # neighbor w. If so, the edge (u, v) is redundant.
+        for v in adj[u]:
+            is_redundant = False
+            for w in adj[u]:
+                if v == w:
+                    continue
+                # If v is reachable through w's path, then (u, v) is a shortcut.
+                if v in reach_via[w]:
+                    is_redundant = True
+                    break
+
+            if is_redundant:
+                if (u, v) in edges_reduced:
+                    edges_reduced.remove((u, v))
+
+        # Pass 3: Update the main `reachable` dictionary for u based ONLY on the
+        # non-redundant edges that were kept.
+        for v in adj[u]:
+            if (u, v) in edges_reduced:
+                reachable[u].add(v)
+                reachable[u].update(reachable[v])
+
+    return dag.nodes, edges_reduced
