@@ -1,4 +1,5 @@
 from collections import defaultdict
+from copy import deepcopy
 from typing import Tuple
 
 class DiagramNode:
@@ -11,7 +12,6 @@ class DiagramNode:
 
     def get_id(self):
         return self.id
-
 
 class VariableNode(DiagramNode):
     def __init__(self, name):
@@ -44,15 +44,36 @@ class DiagramDag:
                 print(f'   -> {child}')
             print('\n--------------')
 
+    def print_nodes(self):
+        for node in self.nodes:
+            print(f'{node.name}, ', end='')
+        print()
 
+    def print_edges(self):
+        print(self.edges)
 
+    def get_nodes_without_incoming_edge(self, edges, nodes):
+        return set(self.get_node_ids()).difference(set(map(lambda edge: edge[1], self.edges)))
 
+    def get_topological_ordering(self):
+        l = list()
+        visited = set()
 
+        def visit(n):
+            if n in visited:
+                return
 
+            for m in self.adj[n]:
+                visit(m)
 
+            visited.add(n)
+            l.append(n)
 
+        for node in self.get_node_ids():
+            if node not in visited:
+                visit(node)
 
-
+        return l
 
 
 

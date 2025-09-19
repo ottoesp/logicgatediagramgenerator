@@ -1,6 +1,6 @@
-from connectives import connectives, Connective, Variable
+from connectives import connectives, Connective
 from typing import Tuple
-from logicalElementTree import DiagramNode, DiagramDag, VariableNode
+from dag import DiagramNode, DiagramDag, VariableNode
 import copy
 import re
 
@@ -53,7 +53,7 @@ def split_at_connective(wff: str) -> Tuple[str, Connective, str]:
 
     return left_formula, lb_connective.name, right_formula
 
-def is_valid_formula(formula):
+def is_valid_formula(formula): # Broken
     """Checks if a string is a valid propositional logic formula."""
     # This pattern is simplified and may not catch all logic rules (e.g., precedence)
     # but works for the structure requested.
@@ -62,8 +62,8 @@ def is_valid_formula(formula):
 
 def parse_wff(wff, dag: DiagramDag, parent_node):
     wff = strip_outer_brackets(wff)
-    if not is_valid_formula(wff):
-        raise Exception(f'{wff} is not a wff')
+    # if not is_valid_formula(wff):
+    #     raise Exception(f'{wff} is not a wff')
 
     if len(wff) <= 1:
         # Only a single variable left
