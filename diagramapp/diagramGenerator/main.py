@@ -1,6 +1,6 @@
+from utils import print_tree
 
-
-from logicalElementTree import LogElNode, print_tree
+from logicalElementTree import LogElNode
 from parseWff import  parse_wff
 
 def generate_diagram(wff):
