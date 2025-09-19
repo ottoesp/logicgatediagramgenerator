@@ -12,13 +12,6 @@ class Connective(LogicalElement):
         LogicalElement.__init__(self, name)
         self.binding_strength = binding_strength
 
-
-
-class Variable(LogicalElement):
-    pass
-
-
-
 connectives = [
     Connective("and", 0),
     Connective("or", 0),

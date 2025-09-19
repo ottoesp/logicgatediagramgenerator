@@ -1,4 +1,4 @@
-from logicalElementTree import DiagramNode, DiagramDag
+from dag import DiagramNode, DiagramDag
 from parseWff import  parse_wff
 
 def generate_diagram(wff):
@@ -12,9 +12,13 @@ def generate_diagram(wff):
     # Then https://en.wikipedia.org/wiki/Layered_graph_drawing
 
     parse_wff(wff, dag, root)
-    dag.print_graph()
+
+    # dag.print_nodes()
+    # dag.print_edges()
+    print(dag.get_topological_ordering())
 
 # generate_diagram("not A or (A and not B) or C")
 # generate_diagram("A")
 #
 generate_diagram("(A or not (A and B))")
+generate_diagram("(A or not (A and B)) or (C and not B)")
