@@ -1,5 +1,11 @@
 from dag import DiagramNode, DiagramDag
 from parseWff import  parse_wff
+from topo import kahns_topological_sort, lex_cmp
+
+def get_layers(dag: DiagramDag):
+
+    topo_sorted = kahns_topological_sort(dag.get_node_ids(), dag.edges)
+
 
 def generate_diagram(wff):
     dag = DiagramDag()
@@ -12,13 +18,11 @@ def generate_diagram(wff):
     # Then https://en.wikipedia.org/wiki/Layered_graph_drawing
 
     parse_wff(wff, dag, root)
+    get_layers(dag)
 
-    # dag.print_nodes()
-    # dag.print_edges()
-    print(dag.get_topological_ordering())
 
-# generate_diagram("not A or (A and not B) or C")
+generate_diagram("not A or (A and not A) or A")
 # generate_diagram("A")
 #
-generate_diagram("(A or not (A and B))")
+# generate_diagram("((A and B) or (A and C)) or (A and not C)")
 # generate_diagram("( (A or not (A and B)) or (C and not B))")
