@@ -5,8 +5,6 @@ from layers import get_layers, order_layers
 from utils import *
 
 
-
-
 def insert_dummy_edges(dag, layers):
     for edge in set(dag.edges):
         u, v = edge
@@ -30,15 +28,6 @@ def insert_dummy_edges(dag, layers):
                 dag.insert_edge(prev, v)
 
 
-
-
-
-    # We're trying to order based on the average of the previous layer,
-    # everybody should only have neighbours one layer away so we should be able to just take average of their x
-    # which creates an ordering that we can space evenly on for the next (so that it stays chill for the next ones)
-    # make sure to actually add it into layers in that order
-
-
 def generate_diagram(wff, w):
     """
     Then use Kahn's algorithm https://en.wikipedia.org/wiki/Topological_sorting
@@ -59,9 +48,9 @@ def generate_diagram(wff, w):
     ordered_layers = order_layers(dag, layers, w)
     for layer in ordered_layers:
         print(layer)
+    # dag.print_graph()
 
-
-generate_diagram("(A and B) or (A and C) or (B and C)", 4)
+generate_diagram("(A and B) or (A and C) or (B and C)", 2)
 
 generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
 # generate_diagram("A")
