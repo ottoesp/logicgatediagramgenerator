@@ -2,6 +2,11 @@ from collections import defaultdict
 from copy import deepcopy
 from typing import Tuple
 
+
+def reset_id_counter():
+    DiagramNode.nextId = 0
+
+
 class DiagramNode:
     nextId = 0
     variables = []
@@ -15,6 +20,7 @@ class DiagramNode:
 
     def __str__(self):
         return f'[{self.name}, {self.id}]'
+
 
 class VariableNode(DiagramNode):
     def __init__(self, name):
@@ -32,6 +38,7 @@ class DiagramDag:
     def __init__(self):
         self.nodes: set[DiagramNode] = set()
         self.edges: set[Tuple[str, str]] = set()
+        reset_id_counter()
 
     def get_node_ids(self):
         return set(map(lambda node: node.get_id(), self.nodes))
@@ -50,12 +57,18 @@ class DiagramDag:
         self.edges.add((u, v))
 
     def print_nodes(self):
-        for node in self.nodes:
+        for node in sorted(self.nodes, key=lambda n: n.id):
             print(f'{node}, ', end='')
         print()
 
     def print_edges(self):
         print(self.edges)
+
+    def print_graph(self):
+        adj = get_adjacency_list(self.get_node_ids(), self.edges)
+        for node in sorted(self.nodes, key=lambda n: n.id):
+            print(node)
+            print(f'   {adj[node.id]}')
 
 def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
     adj = {u : set() for u in nodes}
@@ -63,4 +76,9 @@ def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
         adj[edge[0]].add(edge[1])
     return adj
 
-
+def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
+    adj = {u: set() for u in nodes}
+    for edge in edges:
+        adj[edge[0]].add(edge[1])
+        adj[edge[1]].add(edge[0])
+    return adj
