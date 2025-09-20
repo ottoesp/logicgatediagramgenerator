@@ -3,7 +3,7 @@ from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adja
 from parseWff import parse_wff
 from layers import get_layers, order_layers
 from utils import *
-
+from render import render_dag
 
 def insert_dummy_edges(dag, layers):
     for edge in set(dag.edges):
@@ -46,13 +46,11 @@ def generate_diagram(wff, w):
     insert_dummy_edges(dag, layers)
 
     ordered_layers = order_layers(dag, layers, w)
-    for layer in ordered_layers:
-        print(layer)
-    # dag.print_graph()
+    render_dag(dag.edges, ordered_layers, 5)
 
-generate_diagram("(A and B) or (A and C) or (B and C)", 2)
+generate_diagram("(A and B) or (A and C) or (B and C)", 3)
 
-generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
+# generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
 # generate_diagram("A")
 #
 # generate_diagram("((A and B) or (A and C)) or (A and not C)")
