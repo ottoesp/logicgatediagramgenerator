@@ -39,11 +39,12 @@ def order_layers(dag: DiagramDag, unordered_layers: list[set[str]], w):
             return (i * d)//(n - 1)
 
     max_width = reduce(lambda max_w, layer: max(max_w, len(layer)), unordered_layers, 0)
-    max_width = int(np.lcm.reduce([len(layer) for layer in unordered_layers]))
+    # max_width = int(np.lcm.reduce([len(layer) for layer in unordered_layers]))
 
     adj = get_undirected_adjacency_list(dag.get_node_ids(), dag.edges)
+
     ordered_layers = [
-        [[u, space_evenly(len(unordered_layers[0]), i, max_width)] for i, u in enumerate(unordered_layers[0])]]
+        [[u, i + (max_width - len(unordered_layers[0])) // 2] for i, u in enumerate(unordered_layers[0])]]
 
     for i in range(1, len(unordered_layers)):
         lower_layer = ordered_layers[i - 1]
@@ -68,7 +69,8 @@ def order_layers(dag: DiagramDag, unordered_layers: list[set[str]], w):
 
         current_layer.sort(key=lambda u: u[1])
 
+        offset = (max_width - len(current_layer)) // 2
         for j, u in enumerate(current_layer):
-            u[1] = space_evenly(len(current_layer), j, max_width)
+            u[1] = j + offset
 
     return ordered_layers
