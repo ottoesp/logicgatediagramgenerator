@@ -61,7 +61,10 @@ def order_layers(dag: DiagramDag, unordered_layers: list[set[str]], w):
                     # Then add its x value to the sum
                     neighbour_x_sum += v[1]
                     num_neighbours += 1
-            u[1] = neighbour_x_sum/num_neighbours
+            if num_neighbours > 0:
+                u[1] = neighbour_x_sum/num_neighbours
+            else:
+                u[1] = 0 # Maybe a smarter way to do this
 
         current_layer.sort(key=lambda u: u[1])
 
