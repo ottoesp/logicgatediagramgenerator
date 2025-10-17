@@ -3,3 +3,6 @@
 .idea/
 db.sqlite3
 notes.txt
+
+*.pyc
+__pycache__/
