@@ -30,12 +30,6 @@ def get_layers(dag: DiagramDag, w:int):
 
 def order_layers(dag: DiagramDag, unordered_layers: list[set[str]], w):
 
-    def space_evenly(n, i, d):
-        if n == 1:
-            return 0
-        else:
-            return (i * d)//(n - 1)
-
     max_width = reduce(lambda max_w, layer: max(max_w, len(layer)), unordered_layers, 0)
     # max_width = int(np.lcm.reduce([len(layer) for layer in unordered_layers]))
 

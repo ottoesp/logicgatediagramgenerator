@@ -54,5 +54,5 @@ def generate_diagram(wff, w):
 # generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
 # generate_diagram("A")
 #
-generate_diagram("((A and B) or (A and C)) or (A and not C)", 2)
+generate_diagram("((A and B) or (A and C)) or (A and not C)", 3)
 # generate_diagram("( (A or not (A and B)) or (C and not B))")
