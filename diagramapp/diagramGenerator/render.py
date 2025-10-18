@@ -7,14 +7,16 @@ default_charset = {
     'not' : 'not\nnot',
     'or' : 'or \nor ',
     'and' : 'and\nand',
-    'dummy': '---'
+    'dummy': '+-+',
+    'VertLine': '│',
+    'HorzLine': '─'
 }
 
 debug_charset = deepcopy(default_charset)
 debug_charset['empty'] = '.'
 
 NODE_SPACING = 3
-LINE_SPACING = 2
+LINE_SPACING = 1
 EDGE_SPACING = 2
 
 class Grid:
@@ -66,6 +68,45 @@ def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
             node = dag.get_node_by_id(node_id)
             node.set_coordinates(x * x_spacing, y_vals[i])
 
+def draw_edges_from_node(dag:DiagramDag, grid, edges, upstream: DiagramNode, lane_y):
+    needsLane = False
+
+    for downstream_id in edges:
+        downstream = dag.get_node_by_id(downstream_id)
+
+        x_diff = abs(downstream.x - upstream.x)
+        y_diff = upstream.y - downstream.y
+
+        # WIP: Currently a very rudimentary way of doing this, need to make actually readable
+        if x_diff > 0:
+            lineAB = vert_line(x_diff)
+            grid.set_block(min(upstream.x, downstream.x), lane_y, lineAB)
+
+            needsLane = True
+        else:
+            lineAB = horz_line(y_diff - NODE_SPACING)
+            grid.set_block(downstream.x, downstream.y + NODE_SPACING, lineAB)
+
+    return needsLane
+
+def draw_edges(dag: DiagramDag, grid, layers):
+    adj = dag.get_adjacency_list()
+    for layer in reversed(layers):
+        layer_y = dag.get_node_by_id(layer[0][0]).y
+
+        lane = 0
+
+        for upstream_id, _ in layer:
+            lane_y = layer_y - (EDGE_SPACING + lane)
+            usedLane = draw_edges_from_node(dag, grid, adj[upstream_id], dag.get_node_by_id(upstream_id), lane_y)
+            if usedLane: # This was sort of an attempt to make it smaller but we'd need to determine this earlier
+                lane += 1
+
+def vert_line(height, charset=default_charset):
+    return (charset['VertLine'] + '\n') * height
+
+def horz_line(width, charset=default_charset):
+    return charset['HorzLine'] * width + '\n'
 
 def place_nodes(nodes: list[DiagramNode], grid):
     for node in nodes:
@@ -77,5 +118,7 @@ def render_dag(dag: DiagramDag, layers, x_spacing):
     grid = Grid(max_x, max_y, default_charset)
     assign_node_coordinates(dag, layers, y_vals, x_spacing)
     place_nodes(dag.get_nodes(), grid)
+
+    draw_edges(dag, grid, layers)
 
     print(grid)

@@ -84,10 +84,22 @@ class DiagramDag:
             print(node)
             print(f'   {adj[node.id]}')
 
+    def get_adjacency_list(self):
+        return get_adjacency_list(self.get_node_ids(), self.edges)
+
+    def get_rev_adjacency_list(self):
+        return get_rev_adjacency_list(self.get_node_ids(), self.edges)
+
 def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
     adj = {u : set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])
+    return adj
+
+def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
+    adj = {u: set() for u in nodes}
+    for edge in edges:
+        adj[edge[1]].add(edge[0])
     return adj
 
 def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
