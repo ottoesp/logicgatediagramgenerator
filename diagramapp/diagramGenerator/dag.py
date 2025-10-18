@@ -14,9 +14,15 @@ class DiagramNode:
         self.name = name
         self.id = str(DiagramNode.nextId)
         DiagramNode.nextId += 1
+        self.x = None
+        self.y = None
 
     def get_id(self):
         return self.id
+
+    def set_coordinates(self, x, y):
+        self.x = x
+        self.y = y
 
     def __str__(self):
         return f'[{self.name}, {self.id}]'
@@ -28,11 +34,10 @@ class VariableNode(DiagramNode):
         self.name = name
         self.id = name
 
+
 class DummyNode(DiagramNode):
     def __init__(self):
         super().__init__("dummy")
-
-
 
 class DiagramDag:
     def __init__(self):
@@ -42,6 +47,9 @@ class DiagramDag:
 
     def get_node_ids(self):
         return set(map(lambda node: node.get_id(), self.nodes))
+
+    def get_nodes(self):
+        return self.nodes
 
     def insert_node(self, node: DiagramNode, parent_node: DiagramNode = None):
         if node.get_id() not in self.get_node_ids():
@@ -55,6 +63,12 @@ class DiagramDag:
 
     def insert_edge(self, u, v):
         self.edges.add((u, v))
+
+    def get_node_by_id(self, node_id) -> DiagramNode|None:
+        for node in self.nodes:
+            if node.get_id() == node_id:
+                return node
+        return None
 
     def print_nodes(self):
         for node in sorted(self.nodes, key=lambda n: n.id):
