@@ -1,4 +1,4 @@
-from topo import kahns_topological_sort, lex_cmp, transitive_reduction
+from autoArrange.topo import kahns_topological_sort, lex_cmp, transitive_reduction
 from functools import reduce
 from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
 

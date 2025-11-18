@@ -1,5 +1,4 @@
 from copy import deepcopy
-
 from dag import DiagramDag, get_adjacency_list
 
 

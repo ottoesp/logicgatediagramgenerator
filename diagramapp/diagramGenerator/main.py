@@ -1,9 +1,9 @@
 
 from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
-from parseWff import parse_wff
-from layers import get_layers, order_layers
+from inputParser.parseWff import parse_wff
+from autoArrange.layers import get_layers, order_layers
 from utils import *
-from render import render_dag
+from render.render import render_dag
 
 def insert_dummy_edges(dag, layers):
     for edge in set(dag.edges):
