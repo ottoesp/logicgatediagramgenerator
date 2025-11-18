@@ -1,4 +1,4 @@
-from connectives import connectives, Connective
+from inputParser.connectives import connectives, Connective
 from typing import Tuple
 from dag import DiagramNode, DiagramDag, VariableNode
 import copy
