@@ -1,6 +1,6 @@
 from enum import Enum
 
-class LineCases(Enum):
+class LineCase(Enum):
     HORZ_VERT = 1
     HORZ_DOWN = 2
     HORZ_UP = 3
@@ -20,32 +20,32 @@ class LineCases(Enum):
     DOWN_LEFT = 17
     DOWN_LEFT_CROSSED = 18
     
-ml_lookup = {
+ml_lookup : dict[str, LineCase] = {
 """
 Marching Lines Lookup table for all the different configurations of paths surrounding a cell
 Follows order of cardinal directions and the current cell NESWC (never eat soggy weetbix cold).
 Since we want a different character depending on whether a neighbour is the same or different path. 
 We denote the cells as 
-  'M' : me  (same path)
-  'Y' : you (different path)
-  '0' : empty cell
+    'M' : me  (same path)
+    'Y' : you (different path)
+    '0' : empty cell
 The centre cell is marked 'Y' if another path already occupies it. Otherwise it is marked 0.
 """
-    "MMMM0" : LineCases.HORZ_VERT,
-    "0MMM0" : LineCases.HORZ_DOWN,
-    "MM0M0" : LineCases.HORZ_UP,
-    "MMM00" : LineCases.VERT_RIGHT,
-    "M0MM0" : LineCases.VERT_LEFT,
-    "MM000" : LineCases.UP_RIGHT,
-    "M0M00" : LineCases.VERT,
-    "MMYYY" : LineCases.UP_RIGHT_CROSSED,
-    "MYMYY" : LineCases.VERT_CROSSED,
-    "M00M0" : LineCases.UP_LEFT,
-    "0M0M0" : LineCases.UP_RIGHT,
-    "MYYMY" : LineCases.UP_LEFT_CROSSED,
-    "YMYMY" : LineCases.DOWN_RIGHT_CROSSED,
-    "0M0M0" : LineCases.HORZ,
-    "00MM0" : LineCases.DOWN_LEFT,
-    "YMYMY" : LineCases.HORZ_CROSSED,
-    "YYMMY" : LineCases.DOWN_LEFT_CROSSED
+    "MMMM0" : LineCase.HORZ_VERT,
+    "0MMM0" : LineCase.HORZ_DOWN,
+    "MM0M0" : LineCase.HORZ_UP,
+    "MMM00" : LineCase.VERT_RIGHT,
+    "M0MM0" : LineCase.VERT_LEFT,
+    "MM000" : LineCase.UP_RIGHT,
+    "M0M00" : LineCase.VERT,
+    "MMYYY" : LineCase.UP_RIGHT_CROSSED,
+    "MYMYY" : LineCase.VERT_CROSSED,
+    "M00M0" : LineCase.UP_LEFT,
+    "0M0M0" : LineCase.UP_RIGHT,
+    "MYYMY" : LineCase.UP_LEFT_CROSSED,
+    "YMYMY" : LineCase.DOWN_RIGHT_CROSSED,
+    "0M0M0" : LineCase.HORZ,
+    "00MM0" : LineCase.DOWN_LEFT,
+    "YMYMY" : LineCase.HORZ_CROSSED,
+    "YYMMY" : LineCase.DOWN_LEFT_CROSSED
 }

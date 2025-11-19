@@ -3,6 +3,12 @@ from dag import DiagramDag, DiagramNode
 from functools import reduce
 from .grid import Grid
 
+
+"""
+Currently has issues with lanes being assigned right to left, would like this the other way around
+since variables can go to > 2 and only have downstream paths
+"""
+
 default_charset = {
     'empty' : ' ',
     'not' : 'not\nnot',
