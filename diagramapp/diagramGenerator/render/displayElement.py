@@ -13,7 +13,7 @@ class Path(DisplayElement):
     pass
 
 class DisplayGate(DisplayElement):
-    gateType = None
+    gateType = NodeType.NONE
     def __init__(self, node: DiagramNode):
         self.dataNode = node
         super().__init__(node.x, node.y)
