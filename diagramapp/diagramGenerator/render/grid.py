@@ -1,5 +1,5 @@
 from .charsets import MiscVisual
-from .displayElement import DisplayElement
+from diagramNode import DiagramNode
 
 class Grid:
     def __init__(self, max_x, max_y, charset):
@@ -38,5 +38,5 @@ class Grid:
                 if char != self.charset[MiscVisual.EMPTY]:
                     self.set_cell(x + i, y + j, char, False)
 
-    def set_display_element(self, displayElement : DisplayElement):
-        self.set_block(displayElement.x, displayElement.y, displayElement.render())
+    def set_node(self, node : DiagramNode):
+        self.set_block(node.x, node.y, node.render())
