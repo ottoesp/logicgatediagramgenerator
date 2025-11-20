@@ -6,3 +6,4 @@ class NodeType(Enum):
     NOT = 3
     DUMMY = 4
     VARIABLE = 5
+    NONE = 6

@@ -11,13 +11,13 @@ class DiagramNode:
         self.nodeType : NodeType = nodeType
         self.id = str(DiagramNode.nextId)
         DiagramNode.nextId += 1
-        self.x = None
-        self.y = None
+        self.x: int = -1
+        self.y: int = -1
 
     def get_id(self):
         return self.id
 
-    def set_coordinates(self, x, y):
+    def set_coordinates(self, x: int, y: int):
         self.x = x
         self.y = y
 
