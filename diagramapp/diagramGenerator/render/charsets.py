@@ -1,14 +1,14 @@
 from .marchingLines import LineCase
 from enum import Enum
-from gates import NodeTypes
+from nodeType import NodeType
 
 class MiscVisual(Enum):
     EMPTY = 1
 
-default_charset: dict[LineCase | NodeTypes | MiscVisual : str] = {
-    NodeTypes.AND : "and\nand",
-    NodeTypes.OR : "or \n\or ",
-    NodeTypes.NOT : "not",
+default_charset: dict[LineCase | NodeType | MiscVisual : str] = {
+    NodeType.AND : "and\nand",
+    NodeType.OR : "or \n\or ",
+    NodeType.NOT : "not",
 
     LineCase.HORZ_VERT : "┼",
     LineCase.HORZ_DOWN : "┬",
@@ -29,13 +29,13 @@ default_charset: dict[LineCase | NodeTypes | MiscVisual : str] = {
     LineCase.DOWN_LEFT_CROSSED : "┐",
 
     MiscVisual.EMPTY : " ",
-    NodeTypes.DUMMY : "---"
+    NodeType.DUMMY : "---"
 }
 
-debug_charset: dict[LineCase | NodeTypes | MiscVisual : str] = {
-    NodeTypes.AND : "and\nand",
-    NodeTypes.OR : "or \n\or ",
-    NodeTypes.NOT : "not",
+debug_charset: dict[LineCase | NodeType | MiscVisual : str] = {
+    NodeType.AND : "and\nand",
+    NodeType.OR : "or \n\or ",
+    NodeType.NOT : "not",
 
     LineCase.HORZ_VERT : "┼",
     LineCase.HORZ_DOWN : "┬",
@@ -56,5 +56,5 @@ debug_charset: dict[LineCase | NodeTypes | MiscVisual : str] = {
     LineCase.DOWN_LEFT_CROSSED : "┐",
 
     MiscVisual.EMPTY : "🞘",
-    NodeTypes.DUMMY : '---'
+    NodeType.DUMMY : '---'
 }

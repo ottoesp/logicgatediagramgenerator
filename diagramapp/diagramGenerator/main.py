@@ -48,6 +48,8 @@ def generate_diagram(wff, w):
     ordered_layers = order_layers(dag, layers, w)
     render_dag(dag, ordered_layers, 5)
 
+    for layer in ordered_layers:
+        print(layer)
 
 # generate_diagram("(A and B) or (A and C) or (B and C)", 3)
 

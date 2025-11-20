@@ -1,6 +1,6 @@
 from enum import Enum
 
-class NodeTypes(Enum):
+class NodeType(Enum):
     AND = 1
     OR = 2
     NOT = 3
