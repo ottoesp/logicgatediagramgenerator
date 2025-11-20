@@ -1,4 +1,4 @@
-from .charsets import NodeTypes, default_charset
+from .charsets import NodeType, default_charset
 from dag import DiagramNode
 
 class DisplayElement:
@@ -28,21 +28,21 @@ class DisplayGate(DisplayElement):
         return charset[self.gateType]
 
 class DummyGate(DisplayGate):
-    gateType = NodeTypes.DUMMY
+    gateType = NodeType.DUMMY
     def __init__(self, node):
         super().__init__(node)
 
 class AndGate(DisplayGate):
-    gateType = NodeTypes.AND
+    gateType = NodeType.AND
     def __init__(self, node):
         super().__init__(node)
 
 class OrGate(DisplayGate):
-    gateType = NodeTypes.OR
+    gateType = NodeType.OR
     def __init__(self, node):
         super().__init__(node)
 
 class NotGate(DisplayGate):
-    gateType = NodeTypes.NOT
+    gateType = NodeType.NOT
     def __init__(self, node):
         super().__init__(node)

@@ -1,5 +1,5 @@
 from typing import Tuple
-from gates import NodeTypes
+from nodeType import NodeType
 
 def reset_id_counter():
     DiagramNode.nextId = 0
@@ -7,9 +7,8 @@ def reset_id_counter():
 
 class DiagramNode:
     nextId = 0
-    variables = []
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, nodeType : NodeType):
+        self.nodeType : NodeType = nodeType
         self.id = str(DiagramNode.nextId)
         DiagramNode.nextId += 1
         self.x = None
@@ -23,19 +22,19 @@ class DiagramNode:
         self.y = y
 
     def __str__(self):
-        return f'[{self.name}, {self.id}]'
+        return f'[{self.nodeType.name}, {self.id}]'
 
 
 class VariableNode(DiagramNode):
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(NodeType.VARIABLE)
         self.name = name
         self.id = name
 
 
 class DummyNode(DiagramNode):
     def __init__(self):
-        super().__init__("dummy")
+        super().__init__(NodeType.DUMMY)
 
 class DiagramDag:
     def __init__(self):
