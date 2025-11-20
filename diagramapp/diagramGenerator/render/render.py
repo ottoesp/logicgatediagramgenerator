@@ -3,7 +3,6 @@ from dag import DiagramDag, DiagramNode
 from functools import reduce
 from .grid import Grid
 from .charsets import default_charset, debug_charset
-from .displayElement import DisplayGate, DisplayElement, Path, DisplayVariable
 from nodeType import NodeType
 
 """
@@ -37,25 +36,13 @@ def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
                 raise ValueError()
             node.set_coordinates(x * x_spacing, y_vals[i])
 
-def initialise_display_elements(dag: DiagramDag):
-    display_nodes : list[DisplayElement] = []
-    data_nodes : set[DiagramNode] = dag.get_nodes()
-    
-    for node in data_nodes:
-        if node.nodeType == NodeType.VARIABLE:
-            display_nodes.append(DisplayVariable(node))
-        else:
-            display_nodes.append(DisplayGate(node))
-    return display_nodes
-
 def render_dag(dag: DiagramDag, layers, x_spacing):
     max_x, max_y, y_vals = determine_dimensions(layers, x_spacing)
 
     grid = Grid(max_x, max_y, debug_charset)
     assign_node_coordinates(dag, layers, y_vals, x_spacing)
 
-    display_nodes = initialise_display_elements(dag)
-    for node in display_nodes:
-        grid.set_display_element(node)
+    for node in dag.get_nodes():
+        grid.set_node(node)
 
     grid.print_with_axis(5)
