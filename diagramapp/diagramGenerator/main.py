@@ -1,6 +1,6 @@
 
 from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
-from inputParser.parseWff import parse_wff
+from diagramapp.diagramGenerator.parseWff import parse_wff
 from autoArrange.layers import get_layers, order_layers
 from utils import *
 from render.render import render_dag

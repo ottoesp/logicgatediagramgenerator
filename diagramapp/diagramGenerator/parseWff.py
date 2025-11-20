@@ -73,7 +73,9 @@ def split_at_lowest_binding_node(wff: str) -> Tuple[str, NodeType, str]:
 
     if bracket_depth != 0:
         raise Exception("Incorrect Brackets")
-
+    if lb_node_type is None:
+        raise Exception("")
+    
     left_formula = wff[0:lb_idx]
     right_formula = wff[lb_idx + lb_len:]
 

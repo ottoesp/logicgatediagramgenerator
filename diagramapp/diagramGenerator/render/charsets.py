@@ -5,7 +5,7 @@ from nodeType import NodeType
 class MiscVisual(Enum):
     EMPTY = 1
 
-default_charset: dict[LineCase | NodeType | MiscVisual : str] = {
+default_charset: dict[LineCase | NodeType | MiscVisual, str] = {
     NodeType.AND : "and\nand",
     NodeType.OR : "or \n\or ",
     NodeType.NOT : "not",
@@ -32,7 +32,7 @@ default_charset: dict[LineCase | NodeType | MiscVisual : str] = {
     NodeType.DUMMY : "---"
 }
 
-debug_charset: dict[LineCase | NodeType | MiscVisual : str] = {
+debug_charset: dict[LineCase | NodeType | MiscVisual, str] = {
     NodeType.AND : "and\nand",
     NodeType.OR : "or \n\or ",
     NodeType.NOT : "not",

@@ -31,13 +31,12 @@ class VariableNode(DiagramNode):
         self.name = name
         self.id = name
 
-
 class DummyNode(DiagramNode):
     def __init__(self):
         super().__init__(NodeType.DUMMY)
 
 class DiagramDag:
-    def __init__(self):
+    def __init__(self) -> None:
         self.nodes: set[DiagramNode] = set()
         self.edges: set[Tuple[str, str]] = set()
         reset_id_counter()
@@ -48,7 +47,7 @@ class DiagramDag:
     def get_nodes(self):
         return self.nodes
 
-    def insert_node(self, node: DiagramNode, parent_node: DiagramNode = None):
+    def insert_node(self, node: DiagramNode, parent_node: DiagramNode | None = None):
         if node.get_id() not in self.get_node_ids():
             self.nodes.add(node)
         if parent_node is not None:
@@ -88,19 +87,19 @@ class DiagramDag:
         return get_rev_adjacency_list(self.get_node_ids(), self.edges)
 
 def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u : set() for u in nodes}
+    adj: dict[str, set[str]] = {u : set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])
     return adj
 
 def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u: set() for u in nodes}
+    adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[1]].add(edge[0])
     return adj
 
 def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u: set() for u in nodes}
+    adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])
         adj[edge[1]].add(edge[0])
