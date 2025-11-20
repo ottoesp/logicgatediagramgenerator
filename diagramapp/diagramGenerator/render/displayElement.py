@@ -1,18 +1,48 @@
+from .charsets import NodeTypes, default_charset
+from dag import DiagramNode
+
 class DisplayElement:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
-    def render(self):
+    def render(self, charset=default_charset):
         pass
 
 class Path(DisplayElement):
     pass
 
-class Node(DisplayElement):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+class DisplayGate(DisplayElement):
+    gateType = None
+    def __init__(self, node: DiagramNode):
+        self.dataNode = node
+        super().__init__(node.x, node.y)
+    
+    def get_gate_type(self):
+        return self.gateType
+    
+    def render(self, charset=default_charset):
+        super().render(charset)
+        if self.gateType is None:
+            raise Exception("Gate not of specified type")
+        return charset[self.gateType]
 
-class AndGate(Node):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+class DummyGate(DisplayGate):
+    gateType = NodeTypes.DUMMY
+    def __init__(self, node):
+        super().__init__(node)
+
+class AndGate(DisplayGate):
+    gateType = NodeTypes.AND
+    def __init__(self, node):
+        super().__init__(node)
+
+class OrGate(DisplayGate):
+    gateType = NodeTypes.OR
+    def __init__(self, node):
+        super().__init__(node)
+
+class NotGate(DisplayGate):
+    gateType = NodeTypes.NOT
+    def __init__(self, node):
+        super().__init__(node)

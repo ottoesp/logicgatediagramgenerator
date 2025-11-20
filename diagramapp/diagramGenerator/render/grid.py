@@ -1,8 +1,10 @@
+from .charsets import MiscVisual
+
 class Grid:
     def __init__(self, max_x, max_y, charset):
         self.lines = []
         for i in range(max_x):
-            self.lines.append([charset['empty'] for _ in range(max_y)])
+            self.lines.append([charset[MiscVisual.EMPTY] for _ in range(max_y)])
 
         self.charset = charset
 
@@ -24,5 +26,5 @@ class Grid:
 
         for i, b_line in enumerate(block_lines):
             for j, char in enumerate(b_line):
-                if char != self.charset['empty']:
+                if char != self.charset[MiscVisual.EMPTY]:
                     self.set_cell(x + i, y + j, char, False)

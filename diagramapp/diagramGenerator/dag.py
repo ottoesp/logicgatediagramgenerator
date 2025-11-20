@@ -1,7 +1,5 @@
-from collections import defaultdict
-from copy import deepcopy
 from typing import Tuple
-
+from gates import NodeTypes
 
 def reset_id_counter():
     DiagramNode.nextId = 0

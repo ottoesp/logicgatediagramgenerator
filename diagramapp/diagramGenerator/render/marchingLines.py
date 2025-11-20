@@ -17,8 +17,7 @@ class LineCase(Enum):
     HORZ = 14
     DOWN_LEFT = 15
     HORZ_CROSSED = 16
-    DOWN_LEFT = 17
-    DOWN_LEFT_CROSSED = 18
+    DOWN_LEFT_CROSSED = 17
     
 ml_lookup : dict[str, LineCase] = {
 """
