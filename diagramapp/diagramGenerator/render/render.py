@@ -3,7 +3,7 @@ from dag import DiagramDag, DiagramNode
 from functools import reduce
 from .grid import Grid
 from .charsets import default_charset, debug_charset
-from .displayElement import DisplayGate, AndGate, DummyGate, DisplayElement, NotGate, OrGate, Path
+from .displayElement import DisplayGate, DisplayElement, Path, DisplayVariable
 from nodeType import NodeType
 
 """
@@ -16,7 +16,7 @@ LINE_SPACING = 1
 EDGE_SPACING = 2
 
 def determine_dimensions(layers, x_spacing):
-    max_x = (max([layer[-1][1] for layer in layers]) + 2) * x_spacing
+    max_x = (max([layer[-1][1] for layer in layers]) + 1) * x_spacing
 
     y_vals = [0 for _ in layers]
 
@@ -38,14 +38,15 @@ def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
             node.set_coordinates(x * x_spacing, y_vals[i])
 
 def initialise_display_elements(dag: DiagramDag):
-    display_nodes : list[DisplayGate] = []
+    display_nodes : list[DisplayElement] = []
     data_nodes : set[DiagramNode] = dag.get_nodes()
     
     for node in data_nodes:
-        if node.nodeType == NodeType.AND:
-            display_nodes.append(AndGate(node))
-        elif node.nodeType == NodeType.OR:
-            display_nodes.append(OrGate(node))
+        if node.nodeType == NodeType.VARIABLE:
+            display_nodes.append(DisplayVariable(node))
+        else:
+            display_nodes.append(DisplayGate(node))
+    return display_nodes
 
 def render_dag(dag: DiagramDag, layers, x_spacing):
     max_x, max_y, y_vals = determine_dimensions(layers, x_spacing)
@@ -53,4 +54,8 @@ def render_dag(dag: DiagramDag, layers, x_spacing):
     grid = Grid(max_x, max_y, debug_charset)
     assign_node_coordinates(dag, layers, y_vals, x_spacing)
 
-    print(grid)
+    display_nodes = initialise_display_elements(dag)
+    for node in display_nodes:
+        grid.set_display_element(node)
+
+    grid.print_with_axis(5)
