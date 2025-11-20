@@ -7,3 +7,4 @@ class NodeType(Enum):
     DUMMY = 4
     VARIABLE = 5
     NONE = 6
+    ROOT = 7

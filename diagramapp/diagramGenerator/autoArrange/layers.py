@@ -6,7 +6,7 @@ def get_layers(dag: DiagramDag, w:int):
     _, edges_reduced = transitive_reduction(dag)
     topo = kahns_topological_sort(dag.get_node_ids(), edges_reduced)
 
-    layers = [set()]
+    layers: list[set[str]] = [set()]
     adj = get_adjacency_list(dag.get_node_ids(), dag.edges)
     for node in reversed(topo):
         i = 0
@@ -28,41 +28,57 @@ def get_layers(dag: DiagramDag, w:int):
 
     return layers
 
-def order_layers(dag: DiagramDag, unordered_layers: list[set[str]], w):
+def order_layers(
+    dag: "DiagramDag",
+    unordered_layers: list[set[str]],
+    w
+) -> list[list[tuple[str, int]]]:
 
-    max_width = reduce(lambda max_w, layer: max(max_w, len(layer)), unordered_layers, 0)
-    # max_width = int(np.lcm.reduce([len(layer) for layer in unordered_layers]))
+    # Compute maximum layer width
+    max_width: int = reduce(lambda max_w, layer: max(max_w, len(layer)), unordered_layers, 0)
 
-    adj = get_undirected_adjacency_list(dag.get_node_ids(), dag.edges)
+    # Build adjacency list
+    adj: dict[str, set[str]] = get_undirected_adjacency_list(dag.get_node_ids(), dag.edges)
 
-    ordered_layers = [
-        [[u, i + (max_width - len(unordered_layers[0])) // 2] for i, u in enumerate(unordered_layers[0])]]
+    # First layer: center it horizontally
+    first_layer = [
+        (u, i + (max_width - len(unordered_layers[0])) // 2)
+        for i, u in enumerate(unordered_layers[0])
+    ]
+    ordered_layers: list[list[tuple[str, int]]] = [first_layer]
 
+    # Process each subsequent layer
     for i in range(1, len(unordered_layers)):
-        lower_layer = ordered_layers[i - 1]
+        lower_layer: list[tuple[str, int]] = ordered_layers[i - 1]
 
-        ordered_layers.append([[u, -1] for i, u in enumerate(unordered_layers[i])])
-        current_layer = ordered_layers[i]
+        # Start with placeholder x = -1
+        current_layer: list[tuple[str, int]] = [(u, -1) for u in unordered_layers[i]]
 
-        # Check directions of edges and layers that dummys are entering
-        for u in current_layer:
+        # Compute barycentric x-positions
+        updated_layer: list[tuple[str, int]] = []
+        for (u, _) in current_layer:
             neighbour_x_sum = 0
             num_neighbours = 0
-            for v in lower_layer:
-                # If the node is adjacent
-                if v[0] in adj[u[0]]:
-                    # Then add its x value to the sum
-                    neighbour_x_sum += v[1]
+
+            for (v, x_v) in lower_layer:
+                if v in adj[u]:
+                    neighbour_x_sum += x_v
                     num_neighbours += 1
+
             if num_neighbours > 0:
-                u[1] = neighbour_x_sum/num_neighbours
+                x = neighbour_x_sum // num_neighbours
             else:
-                u[1] = 0 # Maybe a smarter way to do this
+                x = 0  # Fallback if isolated; replace with a better heuristic if wanted
 
-        current_layer.sort(key=lambda u: u[1])
+            updated_layer.append((u, x))
 
-        offset = (max_width - len(current_layer)) // 2
-        for j, u in enumerate(current_layer):
-            u[1] = j + offset
+        # Sort by computed x
+        updated_layer.sort(key=lambda item: item[1])
+
+        # Convert x values into centered integer positions
+        offset = (max_width - len(updated_layer)) // 2
+        final_layer = [(u, j + offset) for j, (u, _) in enumerate(updated_layer)]
+
+        ordered_layers.append(final_layer)
 
     return ordered_layers

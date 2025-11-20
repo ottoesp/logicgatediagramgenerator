@@ -1,5 +1,5 @@
 
-from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
+from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, RootNode
 from parseWff import parse_wff
 from autoArrange.layers import get_layers, order_layers
 from utils import *
@@ -37,7 +37,7 @@ def generate_diagram(wff, w):
     """
 
     dag = DiagramDag()
-    root = DiagramNode("$$$")
+    root = RootNode()
     dag.insert_node(root)
 
     parse_wff(wff, dag, root)

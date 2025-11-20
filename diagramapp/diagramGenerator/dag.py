@@ -24,6 +24,9 @@ class DiagramNode:
     def __str__(self):
         return f'[{self.nodeType.name}, {self.id}]'
 
+class RootNode(DiagramNode):
+    def __init__(self):
+        super().__init__(NodeType.ROOT)
 
 class VariableNode(DiagramNode):
     def __init__(self, name):

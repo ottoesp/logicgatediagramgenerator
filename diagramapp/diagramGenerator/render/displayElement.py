@@ -13,36 +13,21 @@ class Path(DisplayElement):
     pass
 
 class DisplayGate(DisplayElement):
-    gateType = NodeType.NONE
     def __init__(self, node: DiagramNode):
-        self.dataNode = node
         super().__init__(node.x, node.y)
+        self.dataNode = node
+        self.gateType = node.nodeType
     
     def get_gate_type(self):
         return self.gateType
     
     def render(self, charset=default_charset):
-        super().render(charset)
-        if self.gateType is None:
-            raise Exception("Gate not of specified type")
         return charset[self.gateType]
 
-class DummyGate(DisplayGate):
-    gateType = NodeType.DUMMY
-    def __init__(self, node):
-        super().__init__(node)
-
-class AndGate(DisplayGate):
-    gateType = NodeType.AND
-    def __init__(self, node):
-        super().__init__(node)
-
-class OrGate(DisplayGate):
-    gateType = NodeType.OR
-    def __init__(self, node):
-        super().__init__(node)
-
-class NotGate(DisplayGate):
-    gateType = NodeType.NOT
-    def __init__(self, node):
-        super().__init__(node)
+class DisplayVariable(DisplayElement):
+    def __init__(self, node: DiagramNode):
+        super().__init__(node.x, node.y)
+        self.dataNode = node
+    
+    def render(self, charset=default_charset):
+        return self.dataNode.id
