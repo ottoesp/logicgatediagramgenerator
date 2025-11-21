@@ -49,16 +49,20 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_
     gutters: list[Gutter] = []
 
     for i, layer in enumerate(ordered_layers[:-1]):
-        get_edges_to_layer(dag, layer)
+        edges = get_edges_to_layer(dag, layer)
         
         gutter_y = layer_y_coordinates[i] + NODE_SPACING
         gutter_width = layer_y_coordinates[i + 1] - gutter_y
 
         gutter = Gutter(0, gutter_y, gutter_width, max_x, dag)
+        for edge in edges:
+            gutter.add_path(edge[0], edge[1])
 
         gutters.append(gutter)
 
-    # for node in dag.get_nodes():
-    #     grid.set_node(node)
+    for node in dag.get_nodes():
+        grid.set_node(node)
 
     # grid.print_with_axis(5)
+
+    gutters[0].print_gutter()
