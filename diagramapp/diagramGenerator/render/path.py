@@ -69,7 +69,7 @@ class Gutter:
         lane_permutations = list(itertools.permutations(reduced_left))
     
     def assign_lanes(self):
-        for left_node_id, i in enumerate(self.left_layer):
+        for i, left_node_id in enumerate(self.left_layer):
             self.lanes[left_node_id] = i
 
     def add_path(self, start_id : str, dest_id : str):
@@ -100,10 +100,17 @@ class Gutter:
             self.grid[offset_dest_x][y].add(start_id)
 
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
+        print(self.lanes)
+
         # get sibling node
         adj = self.dag.get_adjacency_list()
         start_id = start_node.get_id()
-        sibling_id, = adj[dest_node.get_id()] - {start_id}
+
+        siblings = adj[dest_node.get_id()]
+        if len(siblings) == 1:
+            return 0
+
+        sibling_id, = siblings - {start_id}
 
         sibling_node = self.dag.get_node_by_id(sibling_id)
 
@@ -120,19 +127,22 @@ class Gutter:
 
         offset_higher = False
         # Dest is above the two nodes and the upper node has a further lane
-        if dest_node.x < min_x and higher_close is False:
+        if dest_node.x <= min_x and higher_close is False:
             offset_higher = True
         # Dest is below the two nodes and the upper node has a closer lane
-        elif dest_node.x > max_x and higher_close is True:
+        elif dest_node.x >= max_x and higher_close is True:
             offset_higher = True
         
         # Offset the start node if the start node is higher and we are offsetting the higher one
         if offset_higher == start_higher:
             return 1
-        return 0
+        # Otherwise don't offset
+        else:
+            return 0
     
     def print_gutter(self):
         for row in self.grid:
             print()
             for cell in row:
                 print(f"'{','.join(sorted(cell))}'".ljust(5), end='')
+            print()
