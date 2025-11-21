@@ -6,6 +6,7 @@ from .charsets import default_charset, debug_charset
 from nodeType import NodeType
 from .path import Gutter
 from .rendervars import *
+from utils import get_edges_to_layer
 
 
 def determine_dimensions(layers, x_spacing):
@@ -44,6 +45,10 @@ def generate_gutters(
 
         gutter = Gutter(gutter_y, gutter_width, max_x, dag, layers[i], layers[i + 1])
 
+        edges = get_edges_to_layer(dag, layer)
+        for edge in edges:
+            gutter.add_path(edge[0], edge[1])
+
         gutters.append(gutter)
     return gutters
 
@@ -60,7 +65,4 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_
     for node in dag.get_nodes():
         grid.set_node(node)
 
-    # grid.print_with_axis(5)
-
     gutters = generate_gutters(dag, layers, layer_y_coordinates, max_x)
-    gutters[0].enumerate_configurations()
