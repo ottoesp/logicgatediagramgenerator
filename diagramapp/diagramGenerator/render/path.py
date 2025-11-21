@@ -43,14 +43,13 @@ class Gutter:
                 self.grid[i].append(set())
 
         # Mapping from node ids to lane numbers
-        self.next_lane = 0
         self.lanes : dict[str, int] = {}
+        self.assign_lanes()
 
     def enumerate_configurations(self) -> None:
         adj = self.dag.get_rev_adjacency_list()
         edges: list[tuple[DiagramNode, DiagramNode]] = []
 
-        total_left: set[DiagramNode] = set()
         reduced_left: set[DiagramNode] = set()
         reduced_right: set[DiagramNode] = set()
 
@@ -68,23 +67,21 @@ class Gutter:
                     edges.append((left, right))
         
         lane_permutations = list(itertools.permutations(reduced_left))
-        
+    
+    def assign_lanes(self):
+        for left_node_id, i in enumerate(self.left_layer):
+            self.lanes[left_node_id] = i
 
     def add_path(self, start_id : str, dest_id : str):
         start_node = self.dag.get_node_by_id(start_id)
         dest_node = self.dag.get_node_by_id(dest_id)
 
         offset_dest_x = dest_node.x + self.get_node_offset(start_node, dest_node)
-
-        if start_id not in self.lanes.keys():
-            self.lanes[start_id] = self.next_lane
-            self.next_lane += 1
-        lane = self.lanes[start_id]
         
         path = Path(start_node, dest_node)
         self.paths.append(path)
 
-        lane_y = EDGE_SPACING + lane
+        lane_y = EDGE_SPACING + self.lanes[start_id]
         
         # Draw start, scanning horizontally from start node
         for y in range(lane_y):
@@ -103,17 +100,36 @@ class Gutter:
             self.grid[offset_dest_x][y].add(start_id)
 
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
-        # get sibling nodes
+        # get sibling node
         adj = self.dag.get_adjacency_list()
-        siblings = list(adj[dest_node.get_id()])
+        start_id = start_node.get_id()
+        sibling_id, = adj[dest_node.get_id()] - {start_id}
 
-        # order sibling nodes
-        siblings.sort(key=lambda sib_id : self.dag.get_node_by_id(sib_id).x)
+        sibling_node = self.dag.get_node_by_id(sibling_id)
 
-        # This is always the order we want if destination node is BETWEEN siblings.
-        # If it is above, then if the 
+        start_higher = start_node.x > sibling_node.x
 
-        return siblings.index(start_node.get_id())
+        if start_higher:
+            max_x = start_node.x
+            min_x = sibling_node.x
+            higher_close = self.lanes[start_id] < self.lanes[sibling_id]
+        else:
+            max_x = sibling_node.x
+            min_x = start_node.x
+            higher_close = self.lanes[sibling_id] < self.lanes[start_id]
+
+        offset_higher = False
+        # Dest is above the two nodes and the upper node has a further lane
+        if dest_node.x < min_x and higher_close is False:
+            offset_higher = True
+        # Dest is below the two nodes and the upper node has a closer lane
+        elif dest_node.x > max_x and higher_close is True:
+            offset_higher = True
+        
+        # Offset the start node if the start node is higher and we are offsetting the higher one
+        if offset_higher == start_higher:
+            return 1
+        return 0
     
     def print_gutter(self):
         for row in self.grid:
