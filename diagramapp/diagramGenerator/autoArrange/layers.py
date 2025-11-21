@@ -54,7 +54,7 @@ def order_layers(
         # Start with placeholder x = -1
         current_layer: list[tuple[str, int]] = [(u, -1) for u in unordered_layers[i]]
 
-        # Compute barycentric x-positions
+        # Compute centred x-positions
         updated_layer: list[tuple[str, int]] = []
         for (u, _) in current_layer:
             neighbour_x_sum = 0
