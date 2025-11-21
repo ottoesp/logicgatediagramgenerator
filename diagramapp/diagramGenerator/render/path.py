@@ -2,6 +2,8 @@ from diagramNode import DiagramNode
 from .charsets import MiscVisual, LineCase
 from .rendervars import *
 from dag import DiagramDag
+from nodeType import NodeType
+import itertools
 
 class PathCell:
     def __init__(self, x : int, y : int, value : LineCase | MiscVisual = MiscVisual.EMPTY):
@@ -21,13 +23,15 @@ class Path:
         self.cells : list[PathCell] = []
 
 class Gutter:
-    def __init__(self, x : int, y : int, width : int, height : int, dag: DiagramDag):
+    def __init__(self, y : int, width : int, height : int, dag: DiagramDag, left_layer : list[str], right_layer : list[str]):
         self.paths : list[Path] = []
-        self.x = x
         self.y = y
 
         self.width = width
         self.height = height
+
+        self.left_layer = left_layer
+        self.right_layer = right_layer
 
         self.dag = dag
 
@@ -41,6 +45,30 @@ class Gutter:
         # Mapping from node ids to lane numbers
         self.next_lane = 0
         self.lanes : dict[str, int] = {}
+
+    def enumerate_configurations(self) -> None:
+        adj = self.dag.get_rev_adjacency_list()
+        edges: list[tuple[DiagramNode, DiagramNode]] = []
+
+        total_left: set[DiagramNode] = set()
+        reduced_left: set[DiagramNode] = set()
+        reduced_right: set[DiagramNode] = set()
+
+        # Add edges to all non dummy nodes
+        for left_id in self.left_layer:
+            left = self.dag.get_node_by_id(left_id)
+
+            # We have bounded the number of non-dummy nodes so we can be sure that this will be reasonably efficient
+            if (left.nodeType not in [NodeType.DUMMY]): 
+                reduced_left.add(left)
+                for right_id in adj[left_id]:
+                    right = self.dag.get_node_by_id(right_id)
+
+                    reduced_right.add(right)
+                    edges.append((left, right))
+        
+        lane_permutations = list(itertools.permutations(reduced_left))
+        
 
     def add_path(self, start_id : str, dest_id : str):
         start_node = self.dag.get_node_by_id(start_id)

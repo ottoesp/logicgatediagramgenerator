@@ -8,3 +8,10 @@ class NodeType(Enum):
     VARIABLE = 5
     NONE = 6
     ROOT = 7
+
+NUMBER_OF_INPUTS = {
+    NodeType.AND : 2,
+    NodeType.OR : 2,
+    NodeType.NOT : 1,
+    NodeType.DUMMY : 1,
+}

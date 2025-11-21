@@ -59,13 +59,13 @@ def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
         adj[edge[0]].add(edge[1])
     return adj
 
-def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
+def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]) -> dict[str, set[str]]:
     adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[1]].add(edge[0])
     return adj
 
-def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
+def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]) -> dict[str, set[str]]:
     adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])

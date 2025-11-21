@@ -30,39 +30,37 @@ def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
                 raise ValueError()
             node.set_coordinates(x * x_spacing, y_vals[i])
 
-def get_edges_to_layer(dag: DiagramDag, ordered_layer : list[tuple[str, int]]):
-    adj = dag.get_rev_adjacency_list()
-    edges: list[tuple[str, str]] = []
-
-    for u in ordered_layer:
-        # Add all the edges to list
-        edges.extend([(u[0], v) for v in adj[u[0]]])
-    
-    return edges
-
-def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_spacing : int):
-    max_x, max_y, layer_y_coordinates = determine_dimensions(ordered_layers, x_spacing)
-
-    grid = Grid(max_x, max_y, debug_charset)
-    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing)
+def generate_gutters(
+        dag: DiagramDag, 
+        layers : list[list[str]], 
+        layer_y_coordinates : list[int], 
+        max_x : int
+    ) -> list[Gutter]:
     
     gutters: list[Gutter] = []
-
-    for i, layer in enumerate(ordered_layers[:-1]):
-        edges = get_edges_to_layer(dag, layer)
-        
+    for i, layer in enumerate(layers[:-1]):        
         gutter_y = layer_y_coordinates[i] + NODE_SPACING
         gutter_width = layer_y_coordinates[i + 1] - gutter_y
 
-        gutter = Gutter(0, gutter_y, gutter_width, max_x, dag)
-        for edge in edges:
-            gutter.add_path(edge[0], edge[1])
+        gutter = Gutter(gutter_y, gutter_width, max_x, dag, layers[i], layers[i + 1])
 
         gutters.append(gutter)
+    return gutters
+
+def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_spacing : int):
+    # Determine grid size and spacing then initialise a grid to it
+    max_x, max_y, layer_y_coordinates = determine_dimensions(ordered_layers, x_spacing)
+    grid = Grid(max_x, max_y, debug_charset)
+
+    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing)
+    
+    # Don't need specific x information anymore
+    layers = [[node for node, x in ordered_layer] for ordered_layer in ordered_layers]
 
     for node in dag.get_nodes():
         grid.set_node(node)
 
     # grid.print_with_axis(5)
 
-    gutters[0].print_gutter()
+    gutters = generate_gutters(dag, layers, layer_y_coordinates, max_x)
+    gutters[0].enumerate_configurations()

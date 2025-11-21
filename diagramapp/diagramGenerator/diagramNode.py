@@ -23,6 +23,9 @@ class DiagramNode:
     def __str__(self):
         return f'[{self.nodeType.name}, {self.id}]'
     
+    def __repr__(self):
+        return f'{self.nodeType.name}.{self.id}'
+    
     def render(self, charset=default_charset):
         return charset[self.nodeType]
 
@@ -37,6 +40,9 @@ class VariableNode(DiagramNode):
         self.id = name
     
     def render(self, charset=default_charset):
+        return self.id
+    
+    def __repr__(self):
         return self.id
 
 class DummyNode(DiagramNode):
