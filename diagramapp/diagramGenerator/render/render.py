@@ -4,15 +4,9 @@ from functools import reduce
 from .grid import Grid
 from .charsets import default_charset, debug_charset
 from nodeType import NodeType
+from .path import Gutter
+from .rendervars import *
 
-"""
-Currently has issues with lanes being assigned right to left, would like this the other way around
-since variables can go to > 2 and only have downstream paths
-"""
-
-NODE_SPACING = 3
-LINE_SPACING = 1
-EDGE_SPACING = 2
 
 def determine_dimensions(layers, x_spacing):
     max_x = (max([layer[-1][1] for layer in layers]) + 1) * x_spacing
@@ -25,7 +19,7 @@ def determine_dimensions(layers, x_spacing):
         y_vals[i] = y_offset
         y_offset += NODE_SPACING + len(layer) * LINE_SPACING + 2 * EDGE_SPACING
     max_y = y_offset
-
+ 
     return max_x, max_y, y_vals
 
 def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
@@ -36,13 +30,35 @@ def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
                 raise ValueError()
             node.set_coordinates(x * x_spacing, y_vals[i])
 
-def render_dag(dag: DiagramDag, layers, x_spacing):
-    max_x, max_y, y_vals = determine_dimensions(layers, x_spacing)
+def get_edges_to_layer(dag: DiagramDag, ordered_layer : list[tuple[str, int]]):
+    adj = dag.get_rev_adjacency_list()
+    edges: list[tuple[str, str]] = []
+
+    for u in ordered_layer:
+        # Add all the edges to list
+        edges.extend([(u[0], v) for v in adj[u[0]]])
+    
+    return edges
+
+def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_spacing : int):
+    max_x, max_y, layer_y_coordinates = determine_dimensions(ordered_layers, x_spacing)
 
     grid = Grid(max_x, max_y, debug_charset)
-    assign_node_coordinates(dag, layers, y_vals, x_spacing)
+    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing)
+    
+    gutters: list[Gutter] = []
 
-    for node in dag.get_nodes():
-        grid.set_node(node)
+    for i, layer in enumerate(ordered_layers[:-1]):
+        get_edges_to_layer(dag, layer)
+        
+        gutter_y = layer_y_coordinates[i] + NODE_SPACING
+        gutter_width = layer_y_coordinates[i + 1] - gutter_y
 
-    grid.print_with_axis(5)
+        gutter = Gutter(0, gutter_y, gutter_width, max_x, dag)
+
+        gutters.append(gutter)
+
+    # for node in dag.get_nodes():
+    #     grid.set_node(node)
+
+    # grid.print_with_axis(5)

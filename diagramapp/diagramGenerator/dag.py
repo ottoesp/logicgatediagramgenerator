@@ -27,11 +27,11 @@ class DiagramDag:
     def insert_edge(self, u, v):
         self.edges.add((u, v))
 
-    def get_node_by_id(self, node_id) -> DiagramNode|None:
+    def get_node_by_id(self, node_id) -> DiagramNode:
         for node in self.nodes:
             if node.get_id() == node_id:
                 return node
-        return None
+        raise ValueError()
 
     def print_nodes(self):
         for node in sorted(self.nodes, key=lambda n: n.id):
