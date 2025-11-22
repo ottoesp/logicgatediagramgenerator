@@ -15,3 +15,9 @@ def get_edges_to_layer(dag: DiagramDag, layer : list[str]):
         edges.extend([(u, v) for v in adj[u]])
     
     return edges
+
+def generate_empty_grid(width: int, height: int, fill) -> list[list]:
+    grid = []
+    for i in range(height):
+        grid.append([fill for _ in range(width)])
+    return grid

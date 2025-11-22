@@ -8,7 +8,7 @@ class MiscVisual(Enum):
 
 default_charset: dict[LineCase | NodeType | MiscVisual, str] = {
     NodeType.AND : "and\nand",
-    NodeType.OR : "or \nor ",
+    NodeType.OR : "or─\nor ",
     NodeType.NOT : "not",
 
     LineCase.HORZ_VERT : "┼",
@@ -28,10 +28,12 @@ default_charset: dict[LineCase | NodeType | MiscVisual, str] = {
     LineCase.DOWN_LEFT : "┐",
     LineCase.HORZ_CROSSED : "╪",
     LineCase.DOWN_LEFT_CROSSED : "┐",
+    LineCase.ERROR : "#",
 
     MiscVisual.EMPTY : " ",
     NodeType.DUMMY : '───',
     NodeType.ROOT : "$"
+
 }
 
 debug_charset = copy.deepcopy(default_charset)

@@ -55,7 +55,7 @@ def generate_gutters(
 def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_spacing : int):
     # Determine grid size and spacing then initialise a grid to it
     max_x, max_y, layer_y_coordinates = determine_dimensions(ordered_layers, x_spacing)
-    grid = Grid(max_x, max_y, debug_charset)
+    grid = Grid(max_x, max_y, default_charset)
 
     assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing)
     
@@ -66,3 +66,8 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[tuple[str, int]]], x_
         grid.set_node(node)
 
     gutters = generate_gutters(dag, layers, layer_y_coordinates, max_x)
+    for gutter in gutters:
+        for path in gutter.paths:
+            grid.set_block(0, gutter.y, gutter.render_path(path))
+
+    print(grid)
