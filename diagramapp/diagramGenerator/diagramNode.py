@@ -1,5 +1,6 @@
 from nodeType import NodeType
-from render.charsets import default_charset
+from render.charsets import default_charset, MiscVisual
+from render.marchingLines import LineCase
 
 def reset_id_counter():
     DiagramNode.nextId = 0
@@ -40,7 +41,7 @@ class VariableNode(DiagramNode):
         self.id = name
     
     def render(self, charset=default_charset):
-        return self.id
+        return 2 * charset[MiscVisual.EMPTY] + self.id
     
     def __repr__(self):
         return self.id

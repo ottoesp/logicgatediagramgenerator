@@ -46,14 +46,16 @@ def generate_diagram(wff, w):
     insert_dummy_edges(dag, layers)
 
     ordered_layers = order_layers(dag, layers, w)
-    render_dag(dag, ordered_layers, 5)
+    render_dag(dag, ordered_layers, 3)
 
 # generate_diagram("(A and B) or (A and C) or (B and C)", 3)
 
 # generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
 # generate_diagram("A")
 #
-generate_diagram("((A and B) or (A and C)) or (A and not C)", 3)
-# generate_diagram("( (A or not (A and B)) or (C and not B))")
+# generate_diagram("((A and B) or (A and C)) or (A and not C)", 3)
+generate_diagram("( (A or not (A and B)) or (C and not B))", 3)
 
 # generate_diagram("A and A and A and A and A and B", 10)
+
+generate_diagram("A and B or C", 10)

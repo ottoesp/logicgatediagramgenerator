@@ -18,11 +18,11 @@ class LineCase(Enum):
     DOWN_LEFT = 15
     HORZ_CROSSED = 16
     DOWN_LEFT_CROSSED = 17
+    ERROR = 18
     
-ml_lookup : dict[str, LineCase] = {
 """
 Marching Lines Lookup table for all the different configurations of paths surrounding a cell
-Follows order of cardinal directions and the current cell NESWC (never eat soggy weetbix cold).
+Follows order of cardinal directions and the current cell CNESW (certainly never eat soggy weetbix).
 Since we want a different character depending on whether a neighbour is the same or different path. 
 We denote the cells as 
     'M' : me  (same path)
@@ -30,21 +30,23 @@ We denote the cells as
     '0' : empty cell
 The centre cell is marked 'Y' if another path already occupies it. Otherwise it is marked 0.
 """
-    "MMMM0" : LineCase.HORZ_VERT,
-    "0MMM0" : LineCase.HORZ_DOWN,
-    "MM0M0" : LineCase.HORZ_UP,
-    "MMM00" : LineCase.VERT_RIGHT,
-    "M0MM0" : LineCase.VERT_LEFT,
-    "MM000" : LineCase.UP_RIGHT,
-    "M0M00" : LineCase.VERT,
-    "MMYYY" : LineCase.UP_RIGHT_CROSSED,
-    "MYMYY" : LineCase.VERT_CROSSED,
-    "M00M0" : LineCase.UP_LEFT,
-    "0M0M0" : LineCase.UP_RIGHT,
-    "MYYMY" : LineCase.UP_LEFT_CROSSED,
-    "YMYMY" : LineCase.DOWN_RIGHT_CROSSED,
-    "0M0M0" : LineCase.HORZ,
-    "00MM0" : LineCase.DOWN_LEFT,
-    "YMYMY" : LineCase.HORZ_CROSSED,
-    "YYMMY" : LineCase.DOWN_LEFT_CROSSED
+ml_lookup : dict[str, LineCase] = {
+    "0MMMM" : LineCase.HORZ_VERT,
+    "00MMM" : LineCase.HORZ_DOWN,
+    "0MM0M" : LineCase.HORZ_UP,
+    "0MMM0" : LineCase.VERT_RIGHT,
+    "0M0MM" : LineCase.VERT_LEFT,
+    "0MM00" : LineCase.UP_RIGHT,
+    "0M0M0" : LineCase.VERT,
+    "YMMYY" : LineCase.UP_RIGHT_CROSSED,
+    "YMYMY" : LineCase.VERT_CROSSED,
+    "0M00M" : LineCase.UP_LEFT,
+    "00M0M" : LineCase.UP_RIGHT,
+    "YMYYM" : LineCase.UP_LEFT_CROSSED,
+    "YYMYM" : LineCase.DOWN_RIGHT_CROSSED,
+    "00M0M" : LineCase.HORZ,
+    "000MM" : LineCase.DOWN_LEFT,
+    "00MM0" : LineCase.DOWN_RIGHT,
+    "YYMYM" : LineCase.HORZ_CROSSED,
+    "YYYMM" : LineCase.DOWN_LEFT_CROSSED
 }
