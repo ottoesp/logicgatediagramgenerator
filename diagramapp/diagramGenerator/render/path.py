@@ -211,5 +211,5 @@ class Gutter:
         for row in self.grid:
             print()
             for cell in row:
-                print(f"'{','.join(sorted(cell))}'".ljust(5), end='')
+                print(f"'{','.join(sorted(cell))}'".ljust(6), end='')
             print()
