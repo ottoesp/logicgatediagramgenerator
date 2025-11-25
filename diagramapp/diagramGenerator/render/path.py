@@ -112,19 +112,16 @@ class Gutter:
         for y in range(lane_y, self.width):
             self.add_path_cell(path, offset_dest_x, y, start_id)
 
-    """
-    TODO work out the proper cases including when x is equal
-    """
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
         # get sibling node
         adj = self.dag.get_adjacency_list()
         start_id = start_node.get_id()
 
-        siblings = adj[dest_node.get_id()]
+        siblings = adj[dest_node.get_id()] # Siblings includes start_id
         if len(siblings) == 1:
             return 0
 
-        sibling_id, = siblings - {start_id}
+        sibling_id, = siblings - {start_id} # Unpack the node that is not start
 
         sibling_node = self.dag.get_node_by_id(sibling_id)
 
@@ -140,20 +137,13 @@ class Gutter:
             higher_close = self.lanes[sibling_id] < self.lanes[start_id]
 
         offset_higher = False
-        # Dest is above the two nodes and the upper node has a further lane
-        if dest_node.x < min_x and (not higher_close):
+        if max_x > dest_node.x and min_x > dest_node.x and not higher_close:
             offset_higher = True
-        # Dest is below the two nodes and the upper node has a closer lane
-        elif dest_node.x > max_x and higher_close:
+        elif max_x <= dest_node.x and min_x <= dest_node.x and higher_close:
             offset_higher = True
         
-        # Offset the start node if the start node is higher and we are offsetting the higher one
-        if offset_higher == start_higher:
-            return 1
-
-        print(f'NOT OFFSET: {start_node} {start_node.x},\nYES OFFSET: {sibling_node} {sibling_node.x},\ndest : {dest_node} {dest_node.x}\n')
-
-        return 0
+        offset_start = offset_higher == start_higher
+        return 1 if offset_start else 0
 
     def get_cell_relation(self, source_id: str, x: int, y:int, overlapping: bool):
         cell = self.grid[x][y]
