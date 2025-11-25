@@ -21,3 +21,10 @@ def generate_empty_grid(width: int, height: int, fill) -> list[list]:
     for i in range(height):
         grid.append([fill for _ in range(width)])
     return grid
+
+def max_len_of_arrays(arr: list[list]) -> int:
+    max_len = 0
+    for sub_arr in arr:
+        if len(sub_arr) > max_len:
+            max_len = len(sub_arr)
+    return max_len
