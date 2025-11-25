@@ -76,8 +76,10 @@ def assign_node_coordinates(
             node = dag.get_node_by_id(layer[0])
 
             # Get an arbitrary child
-            first_child = next(iter(adj[node.get_id()]))
-            node.set_coordinates(dag.get_node_by_id(first_child).x, y_vals[i])
+            children = adj[node.get_id()]
+            avg_x = sum([dag.get_node_by_id(id).x for id in children])//len(children)
+
+            node.set_coordinates(avg_x, y_vals[i])
         else:
             # Only one node and in the first layer so centre
             node = dag.get_node_by_id(layer[0])
@@ -121,5 +123,8 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], x_spacing : in
     for gutter in gutters:
         for path in gutter.paths:
             grid.set_block(0, gutter.y, gutter.render_path(path))
+    for gutter in gutters:
+        gutter.print_gutter()
+        print()
 
     grid.print_with_axis(5)
