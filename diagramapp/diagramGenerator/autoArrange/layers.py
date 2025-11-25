@@ -1,6 +1,6 @@
 from autoArrange.topo import kahns_topological_sort, lex_cmp, transitive_reduction
 from functools import reduce
-from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
+from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, get_rev_adjacency_list
 
 def get_layers(dag: DiagramDag, w:int):
     _, edges_reduced = transitive_reduction(dag)
@@ -15,7 +15,7 @@ def get_layers(dag: DiagramDag, w:int):
 
             neighbours_in_higher_layers = reduce(
                 lambda sum_len, layer: sum_len + len(neighbours & layer), layers[i:], 0)
-
+            
             if len(layers[i]) < w and neighbours_in_higher_layers == 0:
             # if len(layers[i]) < w and len(neighbours & layers[i]) == 0:
                 # If the intersection has no elements, i.e. no neighbour is in the layer
@@ -30,55 +30,34 @@ def get_layers(dag: DiagramDag, w:int):
 
 def order_layers(
     dag: "DiagramDag",
-    unordered_layers: list[set[str]],
-    w
-) -> list[list[tuple[str, int]]]:
-
-    # Compute maximum layer width
-    max_width: int = reduce(lambda max_w, layer: max(max_w, len(layer)), unordered_layers, 0)
+    unordered_layers: list[set[str]]
+) -> list[list[str]]:
 
     # Build adjacency list
-    adj: dict[str, set[str]] = get_undirected_adjacency_list(dag.get_node_ids(), dag.edges)
+    adj: dict[str, set[str]] = get_adjacency_list(dag.get_node_ids(), dag.edges)
 
-    # First layer: center it horizontally
-    first_layer = [
-        (u, i + (max_width - len(unordered_layers[0])) // 2)
-        for i, u in enumerate(unordered_layers[0])
-    ]
-    ordered_layers: list[list[tuple[str, int]]] = [first_layer]
+    # First layer is ordered lexicographically by ID (could be a better approach)
+    ordered_layers: list[list[str]] = [sorted(list(unordered_layers[0]))]
 
     # Process each subsequent layer
     for i in range(1, len(unordered_layers)):
-        lower_layer: list[tuple[str, int]] = ordered_layers[i - 1]
+        current_layer = unordered_layers[i]
+        ordered_child_layer = ordered_layers[i-1]
 
-        # Start with placeholder x = -1
-        current_layer: list[tuple[str, int]] = [(u, -1) for u in unordered_layers[i]]
+        # Create a dict of average child positions to act as a sorting key
+        avg_child_positions: dict[str, float] = {}
+        for node_id in current_layer:
+            children = adj[node_id]
 
-        # Compute centred x-positions
-        updated_layer: list[tuple[str, int]] = []
-        for (u, _) in current_layer:
-            neighbour_x_sum = 0
-            num_neighbours = 0
+            # Calculate average position of children in previous layer 
+            sum_child_pos: float = 0
 
-            for (v, x_v) in lower_layer:
-                if v in adj[u]:
-                    neighbour_x_sum += x_v
-                    num_neighbours += 1
+            for child_id in children:
+                sum_child_pos += ordered_child_layer.index(child_id)
+            # Insert into dictionary
+            avg_child_positions[node_id] = sum_child_pos/len(children)
 
-            if num_neighbours > 0:
-                x = neighbour_x_sum // num_neighbours
-            else:
-                x = 0  # Fallback if isolated; replace with a better heuristic if wanted
-
-            updated_layer.append((u, x))
-
-        # Sort by computed x
-        updated_layer.sort(key=lambda item: item[1])
-
-        # Convert x values into centered integer positions
-        offset = (max_width - len(updated_layer)) // 2
-        final_layer = [(u, j + offset) for j, (u, _) in enumerate(updated_layer)]
-
-        ordered_layers.append(final_layer)
+        sorted_layer = sorted(current_layer, key=lambda u_id : avg_child_positions[u_id])
+        ordered_layers.append(sorted_layer)
 
     return ordered_layers
