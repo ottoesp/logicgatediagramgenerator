@@ -94,7 +94,7 @@ class Gutter:
         path = Path(start_node, dest_node)
         self.paths.append(path)
 
-        lane_y = EDGE_SPACING + self.lanes[start_id]
+        lane_y = EDGE_Y_SPACING + self.lanes[start_id]
         
         # Draw start, scanning horizontally from start node
         for y in range(lane_y):
