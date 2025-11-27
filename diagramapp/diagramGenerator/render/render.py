@@ -123,8 +123,5 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], x_spacing : in
     for gutter in gutters:
         for path in gutter.paths:
             grid.set_block(0, gutter.y, gutter.render_path(path))
-    for gutter in gutters:
-        gutter.print_gutter()
-        print()
 
-    grid.print_with_axis(5)
+    print(grid)
