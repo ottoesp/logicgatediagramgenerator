@@ -3,10 +3,10 @@ from .charsets import MiscVisual, LineCase
 from .rendervars import *
 from dag import DiagramDag
 from nodeType import NodeType
-import itertools
 from .marchingLines import ml_lookup
 from .charsets import default_charset
 from utils import generate_empty_grid
+from .laneAssignment import get_optimal_lanes
 
 class PathCell:
     def __init__(self, x : int, y : int, value : LineCase | MiscVisual = MiscVisual.EMPTY):
@@ -81,11 +81,22 @@ class Gutter:
         self.lanes : dict[str, int] = {}
         self.assign_lanes()
 
-    def assign_lanes(self):
-        for i, left_node_id in enumerate(self.left_layer):
-            self.lanes[left_node_id] = i
+    def reset(self):
+        self.collisions = 0
+        self.paths = []
 
-    def add_path(self, start_id : str, dest_id : str):
+        for i in range(self.height):
+            for j in range(self.width):
+                self.grid[i][j] = set()
+
+        self.lanes = dict()
+
+    def assign_lanes(self):
+        optimal_lanes = get_optimal_lanes(self)
+        for lane, node_id in enumerate(optimal_lanes):
+            self.lanes[node_id] = lane
+
+    def add_path(self, start_id : str, dest_id : str) -> int:
         start_node = self.dag.get_node_by_id(start_id)
         dest_node = self.dag.get_node_by_id(dest_id)
         
@@ -94,8 +105,15 @@ class Gutter:
 
         path.generate_path()
 
+        collisions = 0
         for cell in path.cells:
-            self.grid[cell.x][cell.y].add(path.start_node.get_id())
+            grid_cell = self.grid[cell.x][cell.y]
+            if len(grid_cell) > 0 and start_id not in grid_cell:
+                collisions += 1
+            grid_cell.add(path.start_node.get_id())
+
+        self.collisions += collisions
+        return collisions
 
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
         # get sibling node
