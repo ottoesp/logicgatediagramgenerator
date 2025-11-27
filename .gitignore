@@ -1,8 +1,8 @@
-
+.env
 .venv/
 .idea/
 db.sqlite3
 notes.txt
-
+tests.txt
 *.pyc
 __pycache__/
