@@ -34,30 +34,31 @@ def order_layers(
 ) -> list[list[str]]:
 
     # Build adjacency list
-    adj: dict[str, set[str]] = get_adjacency_list(dag.get_node_ids(), dag.edges)
+    adj = dag.get_rev_adjacency_list()
 
-    # First layer is ordered lexicographically by ID (could be a better approach)
-    ordered_layers: list[list[str]] = [sorted(list(unordered_layers[0]))]
+    # We build ordered layers in reverse, first we add the target node
+    ordered_layers: list[list[str]] = [[] for layer in unordered_layers]
+    ordered_layers[-1] = list(unordered_layers[-1])
 
-    # Process each subsequent layer
-    for i in range(1, len(unordered_layers)):
-        current_layer = unordered_layers[i]
-        ordered_child_layer = ordered_layers[i-1]
+    # Process each layer in reverse order from the second last layer
+    for i in range(len(unordered_layers) - 2, -1, -1):
+        left_layer = unordered_layers[i]
+        right_layer = ordered_layers[i + 1]
 
         # Create a dict of average child positions to act as a sorting key
-        avg_child_positions: dict[str, float] = {}
-        for node_id in current_layer:
-            children = adj[node_id]
+        avg_parent_positions: dict[str, float] = {}
+        for node_id in left_layer:
+            parents = adj[node_id]
 
             # Calculate average position of children in previous layer 
-            sum_child_pos: float = 0
+            sum_parent_pos: float = 0
 
-            for child_id in children:
-                sum_child_pos += ordered_child_layer.index(child_id)
+            for parent_id in parents:
+                sum_parent_pos += right_layer.index(parent_id)
             # Insert into dictionary
-            avg_child_positions[node_id] = sum_child_pos/len(children)
+            avg_parent_positions[node_id] = sum_parent_pos/len(parents)
 
-        sorted_layer = sorted(current_layer, key=lambda u_id : avg_child_positions[u_id])
-        ordered_layers.append(sorted_layer)
+        sorted_layer = sorted(left_layer, key=lambda u_id : avg_parent_positions[u_id])
+        ordered_layers[i] = sorted_layer
 
     return ordered_layers
