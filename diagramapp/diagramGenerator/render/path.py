@@ -81,6 +81,15 @@ class Gutter:
         self.lanes : dict[str, int] = {}
         self.assign_lanes()
 
+    def reset(self):
+        self.collisions = 0
+
+        for i in range(self.height):
+            for j in range(self.width):
+                self.grid[i][j] = set()
+
+        self.lanes = dict()
+
     def assign_lanes(self):
         for i, left_node_id in enumerate(self.left_layer):
             self.lanes[left_node_id] = i
