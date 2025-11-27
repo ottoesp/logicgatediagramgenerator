@@ -5,6 +5,9 @@ function onCopyButtonClick() {
 function onGenerateButtonClick(buttonElement) {
     const url = buttonElement.getAttribute('data-url');
     const outputText = document.getElementById("output");
+
+    const inputField = document.getElementById("maininput")
+    print(inputField.innerHTML.textContent)
     fetch(url)
             .then(response => {
                 // Check if the request was successful
@@ -14,7 +17,7 @@ function onGenerateButtonClick(buttonElement) {
                 return response.json(); // If expecting a JSON response
             })
             .then(data => {
-                console.log('Success:', data);
+                print('halleugi')
                 outputText.textContent = data.output;
             })
             .catch(error => {

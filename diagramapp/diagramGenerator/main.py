@@ -37,8 +37,6 @@ def generate_diagram(wff, w):
     for optimal levels
     Then https://en.wikipedia.org/wiki/Layered_graph_drawing
     """
-    print(f'Generating diagram for <{wff}> with max width {w}')
-
     dag = DiagramDag()
     root = RootNode()
     dag.insert_node(root)
