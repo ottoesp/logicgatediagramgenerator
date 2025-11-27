@@ -1,5 +1,5 @@
 from copy import deepcopy
-from dag import DiagramDag, get_adjacency_list
+from ..dag import DiagramDag, get_adjacency_list
 
 
 def nodes_without_incoming_edge(nodes: set[str], edges: set[tuple[str, str]]):
@@ -17,7 +17,7 @@ def get_edges(node: str, edges: set[tuple[str, str]], incoming = False):
 
 def get_incoming_neighbour_positions(node: str, ordered_nodes: list[str], edges: set[tuple[str, str]])->list[int]:
     incoming_neighbours = set(map(lambda edge: edge[0], get_edges(node, edges, True)))
-    positions = list()
+    positions: list[int] = list()
     if len(incoming_neighbours) <= 0:
         return positions
 
@@ -56,7 +56,7 @@ def position_lexicographic_pop(nodes: set[str], edges: set[tuple[str, str]], ord
     if len(nodes) <= 1:
         return nodes.pop()
 
-    max_positions = []
+    max_positions: list[int] = []
     max_node = ''
     for node in nodes:
         node_positions = get_incoming_neighbour_positions(node, ordered_nodes, edges)
@@ -70,7 +70,7 @@ def position_lexicographic_pop(nodes: set[str], edges: set[tuple[str, str]], ord
 def kahns_topological_sort(nodes: set[str], edges: set[tuple[str, str]]):
     remaining_edges = deepcopy(edges)
 
-    l = list()
+    l: list[str] = list()
     s = nodes_without_incoming_edge(nodes, edges)
 
     while len(s) > 0:

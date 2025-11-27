@@ -1,6 +1,6 @@
-from autoArrange.topo import kahns_topological_sort, lex_cmp, transitive_reduction
+from ..autoArrange.topo import kahns_topological_sort, lex_cmp, transitive_reduction
 from functools import reduce
-from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, get_rev_adjacency_list
+from ..dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, get_rev_adjacency_list
 
 def get_layers(dag: DiagramDag, w:int):
     _, edges_reduced = transitive_reduction(dag)

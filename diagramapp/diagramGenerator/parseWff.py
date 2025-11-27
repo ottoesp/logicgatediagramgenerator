@@ -1,6 +1,6 @@
 from typing import Tuple
-from dag import DiagramNode, DiagramDag, VariableNode
-from nodeType import NodeType
+from .dag import DiagramNode, DiagramDag, VariableNode
+from .nodeType import NodeType
 
 INF_BINDING_STRENGTH = 100
 

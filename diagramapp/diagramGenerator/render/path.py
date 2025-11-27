@@ -1,11 +1,11 @@
-from diagramNode import DiagramNode
+from ..diagramNode import DiagramNode
 from .charsets import MiscVisual, LineCase
 from .rendervars import *
-from dag import DiagramDag
-from nodeType import NodeType
+from ..dag import DiagramDag
+from ..nodeType import NodeType
 from .marchingLines import ml_lookup
 from .charsets import default_charset
-from utils import generate_empty_grid
+from ..utils import generate_empty_grid
 from .laneAssignment import get_optimal_lanes
 
 class PathCell:

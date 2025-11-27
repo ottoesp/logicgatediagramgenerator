@@ -1,4 +1,4 @@
-from dag import DiagramDag
+from .dag import DiagramDag
 
 def index_of_containing_set(target: str, sets: list[set[str]]):
     for i, s in enumerate(sets):

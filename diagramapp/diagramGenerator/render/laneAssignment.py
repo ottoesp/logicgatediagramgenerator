@@ -1,6 +1,5 @@
-from dag import DiagramDag, DiagramNode
 import random
-from utils import get_edges_to_layer
+from ..utils import get_edges_to_layer
 import math
 
 INITIAL_TEMPERATURE = 100

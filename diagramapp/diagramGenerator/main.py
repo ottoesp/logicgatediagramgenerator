@@ -1,10 +1,11 @@
 import sys
 
-from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, RootNode
-from parseWff import parse_wff
-from autoArrange.layers import get_layers, order_layers
-from utils import *
-from render.render import render_dag
+from .dag import DiagramDag, get_adjacency_list, get_undirected_adjacency_list
+from .diagramNode import DummyNode, RootNode
+from .parseWff import parse_wff
+from .autoArrange.layers import get_layers, order_layers
+from .utils import *
+from .render.render import render_dag
 
 def insert_dummy_edges(dag, layers):
     for edge in set(dag.edges):
@@ -50,19 +51,7 @@ def generate_diagram(wff, w):
 
     ordered_layers = order_layers(dag, layers)
 
-    render_dag(dag, ordered_layers, 3)
+    return render_dag(dag, ordered_layers, 3)
 
-# generate_diagram("(A and B) or (A and C) or (B and C)", 3)
-
-# generate_diagram("A and (B or (C and ((not B or C) or A)))", 5)
-# generate_diagram("A")
-#
-# generate_diagram("((A and B) or (A and C)) or (A and not C)", 3)
-# generate_diagram("( (A or not (A and B)) or (C and not B))", 3)
-
-# generate_diagram("A and A and A and A and A and B", 10)
-
-# generate_diagram("A and B or C", 10)
-
-if len(sys.argv) > 1:
-    generate_diagram(sys.argv[1], int(sys.argv[2]))
+# if len(sys.argv) > 1:
+#     generate_diagram(sys.argv[1], int(sys.argv[2]))
