@@ -1,104 +1,130 @@
 from copy import deepcopy
-from dag import DiagramDag, DiagramNode
+from dag import DiagramDag, DiagramNode, get_adjacency_list
 from functools import reduce
 from .grid import Grid
+from .charsets import default_charset, debug_charset
+from nodeType import NodeType
+from .path import Gutter
+from .rendervars import *
+from utils import get_edges_to_layer, max_len_of_arrays
+from collections.abc import Callable
+'''
+TODO Maybe just make this reactive to whatever node coordinates are assigned? Makes it more
+flexible and it only gets called once even if that's not very efficient
+'''
+def get_max_dimensions(dag: DiagramDag):
+    nodes = dag.get_nodes()
+    max_x = 0
+    max_y = 0
 
+    for node in nodes:
+        if node.x > max_x:
+            max_x = node.x
+        if node.y > max_y:
+            max_y = node.y
 
-"""
-Currently has issues with lanes being assigned right to left, would like this the other way around
-since variables can go to > 2 and only have downstream paths
-"""
-
-default_charset = {
-    'empty' : ' ',
-    'not' : 'not\nnot',
-    'or' : 'or \nor ',
-    'and' : 'and\nand',
-    'dummy': '+-+',
-    'VertLine': '│',
-    'HorzLine': '─'
-}
-
-debug_charset = deepcopy(default_charset)
-debug_charset['empty'] = '.'
-
-NODE_SPACING = 3
-LINE_SPACING = 1
-EDGE_SPACING = 2
-
-
-
-def determine_dimensions(layers, x_spacing):
-    max_x = (max([layer[-1][1] for layer in layers]) + 2) * x_spacing
-
+    return max_x + NODE_X_MAX_SIZE, max_y + NODE_Y_MAX_SIZE
+            
+def determine_layer_y_coordinates(layers: list[list[str]]) -> list[int]:
     y_vals = [0 for _ in layers]
 
     y_offset = 0
 
     for i, layer in enumerate(layers):
         y_vals[i] = y_offset
-        y_offset += NODE_SPACING + len(layer) * LINE_SPACING + 2 * EDGE_SPACING
-    max_y = y_offset
+        y_offset += NODE_Y_MAX_SIZE + len(layer) * LINE_Y_SPACING + 2 * EDGE_Y_SPACING
+ 
+    return y_vals
 
-    return max_x, max_y, y_vals
+def space_between(len_layer: int, x_spacing: int, max_len_layer: int) -> list[int]:
+    step = (x_spacing * max_len_layer) // (len_layer - 1)
+    positions = []
+    for i in range(len_layer):
+        positions.append(step * i)
+    return positions
 
-def assign_node_coordinates(dag: DiagramDag, layers, y_vals, x_spacing):
-    for i, layer in enumerate(layers):
-        for node_id, x in layer:
-            node = dag.get_node_by_id(node_id)
-            node.set_coordinates(x * x_spacing, y_vals[i])
+def space_around(len_layer: int, x_spacing: int, max_len_layer: int) -> list[int]:
+    base = max_len_layer // (len_layer + 1)
+    extra = max_len_layer % (len_layer + 1)
 
-def draw_edges_from_node(dag:DiagramDag, grid, edges, upstream: DiagramNode, lane_y):
-    needsLane = False
+    positions = []
+    pos = base
+    for i in range(len_layer):
+        positions.append(pos * x_spacing)
+        pos += base + (1 if extra > 0 else 0)
+        extra -= 1
 
-    for downstream_id in edges:
-        downstream = dag.get_node_by_id(downstream_id)
+    return positions
 
-        x_diff = abs(downstream.x - upstream.x)
-        y_diff = upstream.y - downstream.y
-
-        # WIP: Currently a very rudimentary way of doing this, need to make actually readable
-        if x_diff > 0:
-            lineAB = vert_line(x_diff)
-            grid.set_block(min(upstream.x, downstream.x), lane_y, lineAB)
-
-            needsLane = True
-        else:
-            lineAB = horz_line(y_diff - NODE_SPACING)
-            grid.set_block(downstream.x, downstream.y + NODE_SPACING, lineAB)
-
-    return needsLane
-
-def draw_edges(dag: DiagramDag, grid, layers):
+def assign_node_coordinates(
+        dag: DiagramDag, ordered_layers : list[list[str]],
+        y_vals: list[int], x_spacing, 
+        spacing_method: Callable[[int, int, int], list[int]],
+    ):
     adj = dag.get_adjacency_list()
-    for layer in reversed(layers):
-        layer_y = dag.get_node_by_id(layer[0][0]).y
+    max_layer_width = max_len_of_arrays(ordered_layers)
 
-        lane = 0
+    # Loop through each layer and assign coordinates according to layer with spaced x values across layer
+    for i, layer in enumerate(ordered_layers):
+        if len(layer) > 1:
+            positions = spacing_method(len(layer), x_spacing, max_layer_width)
+            for j, node_id in enumerate(layer):
+                node = dag.get_node_by_id(node_id)
+                node.set_coordinates(positions[j], y_vals[i])
+        elif i > 0:
+            # Only one node and it has children so align with a child
+            node = dag.get_node_by_id(layer[0])
 
-        for upstream_id, _ in layer:
-            lane_y = layer_y - (EDGE_SPACING + lane)
-            usedLane = draw_edges_from_node(dag, grid, adj[upstream_id], dag.get_node_by_id(upstream_id), lane_y)
-            if usedLane: # This was sort of an attempt to make it smaller but we'd need to determine this earlier
-                lane += 1
+            # Get an arbitrary child
+            children = adj[node.get_id()]
+            avg_x = sum([dag.get_node_by_id(id).x for id in children])//len(children)
 
-def vert_line(height, charset=default_charset):
-    return (charset['VertLine'] + '\n') * height
+            node.set_coordinates(avg_x, y_vals[i])
+        else:
+            # Only one node and in the first layer so centre
+            node = dag.get_node_by_id(layer[0])
+            node.set_coordinates((x_spacing * max_layer_width) // 2, y_vals[i])
 
-def horz_line(width, charset=default_charset):
-    return charset['HorzLine'] * width + '\n'
+def generate_gutters(
+        dag: DiagramDag, 
+        layers : list[list[str]], 
+        layer_y_coordinates : list[int], 
+        max_x : int
+    ) -> list[Gutter]:
+    
+    gutters: list[Gutter] = []
+    for i, layer in enumerate(layers[:-1]):        
+        gutter_y = layer_y_coordinates[i] + NODE_Y_MAX_SIZE
+        gutter_width = layer_y_coordinates[i + 1] - gutter_y
 
-def place_nodes(nodes: list[DiagramNode], grid):
-    for node in nodes:
-        grid.set_block(node.x, node.y, node.name)
+        gutter = Gutter(gutter_y, gutter_width, max_x, dag, layers[i], layers[i + 1])
 
-def render_dag(dag: DiagramDag, layers, x_spacing):
-    max_x, max_y, y_vals = determine_dimensions(layers, x_spacing)
+        edges = get_edges_to_layer(dag, layer)
+        for edge in edges:
+            gutter.add_path(edge[0], edge[1])
 
+        gutters.append(gutter)
+    return gutters
+
+def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], x_spacing : int):
+    layer_y_coordinates = determine_layer_y_coordinates(ordered_layers)
+
+    max_layer_width = max_len_of_arrays(ordered_layers)
+    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing, space_around)
+
+    # Determine grid size and spacing then initialise a grid to it
+    max_x, max_y = get_max_dimensions(dag)
     grid = Grid(max_x, max_y, default_charset)
-    assign_node_coordinates(dag, layers, y_vals, x_spacing)
-    place_nodes(dag.get_nodes(), grid)
 
-    draw_edges(dag, grid, layers)
+    for node in dag.get_nodes():
+        grid.set_node(node)
 
-    print(grid)
+    gutters = generate_gutters(dag, ordered_layers, layer_y_coordinates, max_x)
+    for gutter in gutters:
+        for path in gutter.paths:
+            grid.set_block(0, gutter.y, gutter.render_path(path))
+    for gutter in gutters:
+        gutter.print_gutter()
+        print()
+
+    grid.print_with_axis(5)

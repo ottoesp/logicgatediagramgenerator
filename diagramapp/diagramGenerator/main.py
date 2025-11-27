@@ -1,6 +1,7 @@
+import sys
 
-from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode
-from inputParser.parseWff import parse_wff
+from dag import DiagramNode, DiagramDag, get_adjacency_list, get_undirected_adjacency_list, DummyNode, RootNode
+from parseWff import parse_wff
 from autoArrange.layers import get_layers, order_layers
 from utils import *
 from render.render import render_dag
@@ -35,19 +36,21 @@ def generate_diagram(wff, w):
     for optimal levels
     Then https://en.wikipedia.org/wiki/Layered_graph_drawing
     """
+    print(f'Generating diagram for <{wff}> with max width {w}')
 
     dag = DiagramDag()
-    root = DiagramNode("$$$")
+    root = RootNode()
     dag.insert_node(root)
 
     parse_wff(wff, dag, root)
+
     layers = get_layers(dag, w)
 
     insert_dummy_edges(dag, layers)
 
-    ordered_layers = order_layers(dag, layers, w)
-    render_dag(dag, ordered_layers, 5)
+    ordered_layers = order_layers(dag, layers)
 
+    render_dag(dag, ordered_layers, 3)
 
 # generate_diagram("(A and B) or (A and C) or (B and C)", 3)
 
@@ -55,6 +58,11 @@ def generate_diagram(wff, w):
 # generate_diagram("A")
 #
 # generate_diagram("((A and B) or (A and C)) or (A and not C)", 3)
-# generate_diagram("( (A or not (A and B)) or (C and not B))")
+# generate_diagram("( (A or not (A and B)) or (C and not B))", 3)
 
-generate_diagram("A and A and A and A and A and B", 10)
+# generate_diagram("A and A and A and A and A and B", 10)
+
+# generate_diagram("A and B or C", 10)
+
+if len(sys.argv) > 1:
+    generate_diagram(sys.argv[1], int(sys.argv[2]))

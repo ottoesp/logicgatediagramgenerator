@@ -6,3 +6,8 @@ notes.txt
 
 *.pyc
 __pycache__/
+tests.txt
+replace_key.txt
+*.pyc
+__pycache__/
+.vscode/

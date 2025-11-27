@@ -1,0 +1,6 @@
+{
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/diagramapp/diagramGenerator",
+    "${workspaceFolder}/diagramapp"
+  ]
+}

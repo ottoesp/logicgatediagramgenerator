@@ -1,46 +1,9 @@
-from collections import defaultdict
-from copy import deepcopy
 from typing import Tuple
-
-
-def reset_id_counter():
-    DiagramNode.nextId = 0
-
-
-class DiagramNode:
-    nextId = 0
-    variables = []
-    def __init__(self, name):
-        self.name = name
-        self.id = str(DiagramNode.nextId)
-        DiagramNode.nextId += 1
-        self.x = None
-        self.y = None
-
-    def get_id(self):
-        return self.id
-
-    def set_coordinates(self, x, y):
-        self.x = x
-        self.y = y
-
-    def __str__(self):
-        return f'[{self.name}, {self.id}]'
-
-
-class VariableNode(DiagramNode):
-    def __init__(self, name):
-        super().__init__(name)
-        self.name = name
-        self.id = name
-
-
-class DummyNode(DiagramNode):
-    def __init__(self):
-        super().__init__("dummy")
+from nodeType import NodeType
+from diagramNode import *
 
 class DiagramDag:
-    def __init__(self):
+    def __init__(self) -> None:
         self.nodes: set[DiagramNode] = set()
         self.edges: set[Tuple[str, str]] = set()
         reset_id_counter()
@@ -51,7 +14,7 @@ class DiagramDag:
     def get_nodes(self):
         return self.nodes
 
-    def insert_node(self, node: DiagramNode, parent_node: DiagramNode = None):
+    def insert_node(self, node: DiagramNode, parent_node: DiagramNode | None = None):
         if node.get_id() not in self.get_node_ids():
             self.nodes.add(node)
         if parent_node is not None:
@@ -64,11 +27,11 @@ class DiagramDag:
     def insert_edge(self, u, v):
         self.edges.add((u, v))
 
-    def get_node_by_id(self, node_id) -> DiagramNode|None:
+    def get_node_by_id(self, node_id) -> DiagramNode:
         for node in self.nodes:
             if node.get_id() == node_id:
                 return node
-        return None
+        raise ValueError()
 
     def print_nodes(self):
         for node in sorted(self.nodes, key=lambda n: n.id):
@@ -91,19 +54,19 @@ class DiagramDag:
         return get_rev_adjacency_list(self.get_node_ids(), self.edges)
 
 def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u : set() for u in nodes}
+    adj: dict[str, set[str]] = {u : set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])
     return adj
 
-def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u: set() for u in nodes}
+def get_rev_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]) -> dict[str, set[str]]:
+    adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[1]].add(edge[0])
     return adj
 
-def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
-    adj = {u: set() for u in nodes}
+def get_undirected_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]) -> dict[str, set[str]]:
+    adj: dict[str, set[str]] = {u: set() for u in nodes}
     for edge in edges:
         adj[edge[0]].add(edge[1])
         adj[edge[1]].add(edge[0])
