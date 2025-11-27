@@ -3,7 +3,7 @@ import random
 from utils import get_edges_to_layer
 import math
 
-INITIAL_TEMPERATURE = 10
+INITIAL_TEMPERATURE = 100
 FINAL_TEMPERATURE = 10**-3
 MAX_STEPS = 500
 
@@ -85,7 +85,6 @@ def calculate_collisions(gutter, lanes: list[str], edges: list[tuple[str, str]])
     return gutter.collisions, collisions_per_source
 
 def get_optimal_lanes(gutter) -> list[str]:
-    print(f"NEW GUTTER {gutter.y}")
     nodes = gutter.left_layer
     
     if len(nodes) <= 1:
