@@ -4,5 +4,6 @@
 db.sqlite3
 notes.txt
 tests.txt
+replace_key.txt
 *.pyc
 __pycache__/

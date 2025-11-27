@@ -18,15 +18,42 @@ class PathCell:
         return f'({self.x},{self.y}).{self.value.name}'
 
 class Path:
-    def __init__(self, start_node : DiagramNode, dest_node : DiagramNode):
+    def __init__(self, start_node : DiagramNode, dest_node : DiagramNode, gutter):
         self.start_node = start_node
         self.dest_node = dest_node
+        self.gutter = gutter
 
         # x, y are the top left coordinates of the box that contains the path
         self.x = min(start_node.x, dest_node.x)
         self.y = min(start_node.y, dest_node.y)
 
         self.cells : set[PathCell] = set()
+    
+    def generate_path(self):
+        lane_y = EDGE_Y_SPACING + self.gutter.lanes[self.start_node.get_id()]
+        offset_dest_x = self.dest_node.x + self.gutter.get_node_offset(self.start_node, self.dest_node)
+
+        # Draw start, scanning horizontally from start node
+        for y in range(lane_y):
+            self.add_path_cell(self.start_node.x, y)
+
+        # Draw vertical part, scanning vertically up or down the lane
+        if (self.start_node.x < offset_dest_x):
+             for x in range(self.start_node.x, offset_dest_x, 1):
+                 self.add_path_cell(x, lane_y)
+        else:
+            for x in range(self.start_node.x, offset_dest_x, -1):
+                 self.add_path_cell(x, lane_y,)
+
+        # Draw end, scanning horizontally from lane to dest node
+        for y in range(lane_y, self.gutter.width):
+            self.add_path_cell(offset_dest_x, y)
+    
+    def add_path_cell(
+            self, x: int, y: int,
+            value : LineCase | MiscVisual = MiscVisual.EMPTY
+    ) -> None:
+        self.cells.add(PathCell(x, y, value))
 
 class Gutter:
     def __init__(self, y : int, width : int, height : int, dag: DiagramDag, left_layer : list[str], right_layer : list[str]):
@@ -40,6 +67,8 @@ class Gutter:
         self.right_layer = right_layer
 
         self.dag = dag
+        
+        self.collisions = 0
 
         # Initialise an empty grid to keep track of overlapping paths
         self.grid : list[list[set[str]]] = []
@@ -52,65 +81,21 @@ class Gutter:
         self.lanes : dict[str, int] = {}
         self.assign_lanes()
 
-    def enumerate_configurations(self) -> None:
-        adj = self.dag.get_rev_adjacency_list()
-        edges: list[tuple[DiagramNode, DiagramNode]] = []
-
-        reduced_left: set[DiagramNode] = set()
-        reduced_right: set[DiagramNode] = set()
-
-        # Add edges to all non dummy nodes
-        for left_id in self.left_layer:
-            left = self.dag.get_node_by_id(left_id)
-
-            # We have bounded the number of non-dummy nodes so we can be sure that this will be reasonably efficient
-            if (left.nodeType not in [NodeType.DUMMY]): 
-                reduced_left.add(left)
-                for right_id in adj[left_id]:
-                    right = self.dag.get_node_by_id(right_id)
-
-                    reduced_right.add(right)
-                    edges.append((left, right))
-        
-        lane_permutations = list(itertools.permutations(reduced_left))
-    
     def assign_lanes(self):
         for i, left_node_id in enumerate(self.left_layer):
             self.lanes[left_node_id] = i
 
-    def add_path_cell(
-            self, path: Path, x: int, y: int, source_id: str,
-            value : LineCase | MiscVisual = MiscVisual.EMPTY
-    ) -> None:
-        self.grid[x][y].add(source_id)
-        path.cells.add(PathCell(x, y, value))
-
     def add_path(self, start_id : str, dest_id : str):
         start_node = self.dag.get_node_by_id(start_id)
         dest_node = self.dag.get_node_by_id(dest_id)
-
-        offset_dest_x = dest_node.x + self.get_node_offset(start_node, dest_node)
         
-        path = Path(start_node, dest_node)
+        path = Path(start_node, dest_node, self)
         self.paths.append(path)
 
-        lane_y = EDGE_Y_SPACING + self.lanes[start_id]
-        
-        # Draw start, scanning horizontally from start node
-        for y in range(lane_y):
-            self.add_path_cell(path, start_node.x, y, start_id)
+        path.generate_path()
 
-        # Draw vertical part, scanning vertically up or down the lane
-        if (start_node.x < offset_dest_x):
-             for x in range(start_node.x, offset_dest_x, 1):
-                 self.add_path_cell(path, x, lane_y, start_id)
-        else:
-            for x in range(start_node.x, offset_dest_x, -1):
-                 self.add_path_cell(path, x, lane_y, start_id)
-
-        # Draw end, scanning horizontally from lane to dest node
-        for y in range(lane_y, self.width):
-            self.add_path_cell(path, offset_dest_x, y, start_id)
+        for cell in path.cells:
+            self.grid[cell.x][cell.y].add(path.start_node.get_id())
 
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
         # get sibling node
