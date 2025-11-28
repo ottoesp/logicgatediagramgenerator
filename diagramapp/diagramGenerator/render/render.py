@@ -3,11 +3,10 @@ from ..dag import DiagramDag, DiagramNode, get_adjacency_list
 from functools import reduce
 from .grid import Grid
 from .charsets import default_charset, debug_charset
-from ..nodeType import NodeType
+from ..nodeType import NodeType, VERTICAL_SIZE
 from .path import Gutter
 from .rendervars import *
 from ..utils import get_edges_to_layer, max_len_of_arrays
-from collections.abc import Callable
 '''
 TODO Maybe just make this reactive to whatever node coordinates are assigned? Makes it more
 flexible and it only gets called once even if that's not very efficient
@@ -59,7 +58,6 @@ def space_around(len_layer: int, x_spacing: int, max_len_layer: int) -> list[int
 def assign_node_coordinates(
         dag: DiagramDag, ordered_layers : list[list[str]],
         y_vals: list[int], x_spacing, 
-        spacing_method: Callable[[int, int, int], list[int]],
     ):
     adj = dag.get_adjacency_list()
     max_layer_width = max_len_of_arrays(ordered_layers)
@@ -67,7 +65,7 @@ def assign_node_coordinates(
     # Loop through each layer and assign coordinates according to layer with spaced x values across layer
     for i, layer in enumerate(ordered_layers):
         if len(layer) > 1:
-            positions = spacing_method(len(layer), x_spacing, max_layer_width)
+            positions = space_around(len(layer), x_spacing, max_layer_width)
             for j, node_id in enumerate(layer):
                 node = dag.get_node_by_id(node_id)
                 node.set_coordinates(positions[j], y_vals[i])
@@ -110,8 +108,8 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], x_spacing : in
     layer_y_coordinates = determine_layer_y_coordinates(ordered_layers)
 
     max_layer_width = max_len_of_arrays(ordered_layers)
-    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing, space_around)
-
+    assign_node_coordinates(dag, ordered_layers, layer_y_coordinates, x_spacing)
+    
     # Determine grid size and spacing then initialise a grid to it
     max_x, max_y = get_max_dimensions(dag)
     grid = Grid(max_x, max_y, default_charset)

@@ -14,4 +14,14 @@ NUMBER_OF_INPUTS = {
     NodeType.OR : 2,
     NodeType.NOT : 1,
     NodeType.DUMMY : 1,
+    NodeType.ROOT : 1
+}
+
+VERTICAL_SIZE = {
+    NodeType.AND : 2,
+    NodeType.OR : 2,
+    NodeType.NOT : 1,
+    NodeType.DUMMY : 1,
+    NodeType.ROOT : 1,
+    NodeType.VARIABLE : 1
 }
