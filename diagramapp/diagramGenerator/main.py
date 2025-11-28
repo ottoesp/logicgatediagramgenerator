@@ -53,5 +53,5 @@ def generate_diagram(wff, w):
 
     return render_dag(dag, ordered_layers, 3)
 
-# if len(sys.argv) > 1:
-#     generate_diagram(sys.argv[1], int(sys.argv[2]))
+if len(sys.argv) > 1:
+    print(generate_diagram(sys.argv[1], int(sys.argv[2])))
