@@ -15,7 +15,8 @@ def index(request):
 def generate(request):
     wff = request.body.decode('utf-8')
     try:
-        output = generate_diagram(wff, 8)
+        max_width = int(request.headers.get('max-diagram-width'))
+        output = generate_diagram(wff, max_width)
     except Exception as e:
         output = str(e)
     return JsonResponse({"output": output})

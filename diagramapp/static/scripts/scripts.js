@@ -16,10 +16,12 @@ function fetchGeneratorOutput(buttonElement, input) {
     const outputText = document.getElementById("output");
     const csrftoken = Cookies.get('csrftoken')
 
+    const max_width_selector = document.getElementById("max-width-selector")
+
     fetch(url, {
         method: 'POST',
         headers: {
-            'max-diagram-width' : 5,
+            'max-diagram-width' : max_width_selector.value,
             'X-CSRFToken': csrftoken,
         },
         mode: 'same-origin',
