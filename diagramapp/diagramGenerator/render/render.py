@@ -1,12 +1,12 @@
 from copy import deepcopy
-from dag import DiagramDag, DiagramNode, get_adjacency_list
+from ..dag import DiagramDag, DiagramNode, get_adjacency_list
 from functools import reduce
 from .grid import Grid
 from .charsets import default_charset, debug_charset
-from nodeType import NodeType
+from ..nodeType import NodeType
 from .path import Gutter
 from .rendervars import *
-from utils import get_edges_to_layer, max_len_of_arrays
+from ..utils import get_edges_to_layer, max_len_of_arrays
 from collections.abc import Callable
 '''
 TODO Maybe just make this reactive to whatever node coordinates are assigned? Makes it more
@@ -124,4 +124,4 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], x_spacing : in
         for path in gutter.paths:
             grid.set_block(0, gutter.y, gutter.render_path(path))
 
-    print(grid)
+    return str(grid)

@@ -1,6 +1,6 @@
-from nodeType import NodeType
-from render.charsets import default_charset, MiscVisual
-from render.marchingLines import LineCase
+from .nodeType import NodeType
+from .render.charsets import default_charset, MiscVisual
+from .render.marchingLines import LineCase
 
 def reset_id_counter():
     DiagramNode.nextId = 0

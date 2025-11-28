@@ -1,6 +1,6 @@
 from .marchingLines import LineCase
 from enum import Enum
-from nodeType import NodeType
+from ..nodeType import NodeType
 import copy
 
 class MiscVisual(Enum):

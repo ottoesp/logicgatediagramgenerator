@@ -1,5 +1,5 @@
 from .charsets import MiscVisual
-from diagramNode import DiagramNode
+from ..diagramNode import DiagramNode
 
 class Grid:
     def __init__(self, max_x, max_y, charset):

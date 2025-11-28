@@ -1,6 +1,6 @@
 from typing import Tuple
-from nodeType import NodeType
-from diagramNode import *
+from .nodeType import NodeType
+from .diagramNode import *
 
 class DiagramDag:
     def __init__(self) -> None:
