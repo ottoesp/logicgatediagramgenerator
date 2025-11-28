@@ -6,6 +6,11 @@ body {
   min-height: 15em;
 }
 
+.output-text-min-height {
+  min-height: 1rem;
+  overflow: hidden;
+}
+
 .mb-20vh {
   margin-bottom: 20vh !important;
 }
