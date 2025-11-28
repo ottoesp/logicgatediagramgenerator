@@ -1,9 +1,20 @@
+const MAX_INPUT_SIZE = 50
+
 function onGenerateButtonClick(buttonElement) {
+    
+    let input = document.getElementById("maininput").value
+    if (input.length > MAX_INPUT_SIZE) {
+        inputTooLargeError()
+    } else {
+        fetchGeneratorOutput(buttonElement, input)
+    }
+    
+}
+
+function fetchGeneratorOutput(buttonElement, input) {
     const url = buttonElement.getAttribute('data-url');
     const outputText = document.getElementById("output");
     const csrftoken = Cookies.get('csrftoken')
-
-    let input = document.getElementById("maininput").value
 
     fetch(url, {
         method: 'POST',
@@ -29,4 +40,9 @@ function onGenerateButtonClick(buttonElement) {
                 console.error('Error:', error);
                 // Handle any errors
             });
+}
+
+function inputTooLargeError() {
+    const outputText = document.getElementById("output");
+    outputText.textContent = "Error: Input too Large"
 }

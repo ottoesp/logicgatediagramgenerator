@@ -49,16 +49,21 @@
             </div>
         </div>
         <div class="row">
-            <div class="col bg-light border rounded p-3 mb-3 output-min-height">
-                <pre id="output">
+            <div class="col bg-light border rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
+                <pre id="output" class="m-0 w-100">
             </div>
         </div>
-        <div class="row mb-3 mx-0 border rounded p-3 w-25">
-            <label for="max-width-selector" class="form-label text-center">Maximum Width</label>
-            <input type="range" id="max-width-selector" class="form-range" min="2" max="10" step="1" value="4">
+        <div class="row mb-3 mx-0 gap-3">
+            <div class="col-3 border rounded p-3 text-center">
+                <label for="max-width-selector" class="form-label">Maximum Width</label>
+                <input type="range" id="max-width-selector" class="form-range" min="2" max="10" step="1" value="4">
+            </div>
+            <div class="col border rounded p-3">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum error tempora dicta similique, magni sapiente. Sint soluta in odio consequuntur quas quia quidem, minus distinctio iste consequatur, facere, maxime reprehenderit!</p>
+            </div>
         </div>
         <div class="input-group">
-            <input type="text" class="form-control" id="maininput" placeholder="Enter logical sentence here">
+            <input type="text" class="form-control" id="maininput" placeholder="Try A and (B or C)...">
             <button id="generateButton"
                     class="btn btn-primary"
                     data-url="{% url 'generate' %}"
