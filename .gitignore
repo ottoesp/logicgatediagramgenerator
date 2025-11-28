@@ -11,3 +11,6 @@ replace_key.txt
 *.pyc
 __pycache__/
 .vscode/
+
+node_modules/
+package-lock.json

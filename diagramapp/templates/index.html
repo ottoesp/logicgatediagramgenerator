@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="row mb-4">
             <div class="col">
                 <h1 class="display-3">Logic Gate Generator</h1>
@@ -53,16 +53,17 @@
                     </pre>
                 </div>
                 <div class="d-flex gap-3" >
-                    <div class="form-group flex-grow-1">
+                    <div class="form-group flex-grow-1"> 
                         <input type="text" class="form-control" id="maininput" placeholder="Enter WFF here">
                     </div>
-                    <button id="generateButton" data-url="{% url 'generate' %}" class="btn btn-primary" onclick="onGenerateButtonClick(this)">Generate</button>
+                    <button id="generateButton" data-url="{% url 'generate' %}" class="btn btn-primary" onclick="onGenerateButtonClick(this)">{% csrf_token %}Generate</button>
                 </div>
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'scripts/scripts.js' %}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

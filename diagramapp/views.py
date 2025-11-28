@@ -13,8 +13,9 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def generate(request):
+    wff = request.body.decode('utf-8')
     try:
-        output = generate_diagram("(A and B) or (C and D) or E", 8)
+        output = generate_diagram(wff, 8)
     except Exception as e:
         output = str(e)
     return JsonResponse({"output": output})
