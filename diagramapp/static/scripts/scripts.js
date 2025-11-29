@@ -1,4 +1,4 @@
-const MAX_INPUT_SIZE = 50
+const MAX_INPUT_SIZE = 200
 
 function onGenerateButtonClick(buttonElement) {
     
