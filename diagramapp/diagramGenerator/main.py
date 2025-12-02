@@ -4,6 +4,7 @@ from .dag import DiagramDag, get_adjacency_list, get_undirected_adjacency_list
 from .diagramNode import DummyNode, RootNode
 from .parseWff import parse_wff
 from .autoArrange.layers import get_layers, order_layers
+from .autoArrange.verticalSpacing import assign_coordinates
 from .utils import *
 from .render.render import render_dag
 
@@ -51,7 +52,9 @@ def generate_diagram(wff, w):
 
     ordered_layers = order_layers(dag, layers)
 
-    return render_dag(dag, ordered_layers, 3)
+    layer_y_coordinates = assign_coordinates(dag, ordered_layers, 3)
+
+    return render_dag(dag, ordered_layers, layer_y_coordinates)
 
 # if len(sys.argv) > 1:
-#     generate_diagram(sys.argv[1], int(sys.argv[2]))
+#     print(generate_diagram(sys.argv[1], int(sys.argv[2])))
