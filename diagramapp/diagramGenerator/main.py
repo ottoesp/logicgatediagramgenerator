@@ -23,10 +23,10 @@ def insert_dummy_edges(dag, layers):
                 dummy = DummyNode()
 
                 dag.insert_node(dummy)
-                layers[layer_u - (i + 1)].add(dummy.get_id())
+                layers[layer_u - (i + 1)].add(dummy.id)
 
-                dag.insert_edge(prev, dummy.get_id())
-                prev = dummy.get_id()
+                dag.insert_edge(prev, dummy.id)
+                prev = dummy.id
             else:
                 dag.insert_edge(prev, v)
 

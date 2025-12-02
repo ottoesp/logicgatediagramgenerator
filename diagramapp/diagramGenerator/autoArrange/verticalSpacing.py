@@ -54,7 +54,7 @@ def align_inline_with_neighbour(dag: DiagramDag, left_layer: list[str], position
         for neighbour in neighbours:
 
             # Determine whether it is better to place it in-line with the top or bottom of the neighbour
-            siblings = forward_adj[neighbour.get_id()]
+            siblings = forward_adj[neighbour.id]
             if len(siblings) <= 1:
                 # It has no siblings so put in-line
                 try_x = neighbour.x

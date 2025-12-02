@@ -9,16 +9,16 @@ class DiagramDag:
         reset_id_counter()
 
     def get_node_ids(self):
-        return set(map(lambda node: node.get_id(), self.nodes))
+        return set(map(lambda node: node.id, self.nodes))
 
     def get_nodes(self):
         return self.nodes
 
     def insert_node(self, node: DiagramNode, parent_node: DiagramNode | None = None):
-        if node.get_id() not in self.get_node_ids():
+        if node.id not in self.get_node_ids():
             self.nodes.add(node)
         if parent_node is not None:
-            self.edges.add((parent_node.get_id(), node.get_id()))
+            self.edges.add((parent_node.id, node.id))
         return node
 
     def delete_edge(self, u, v):
@@ -29,7 +29,7 @@ class DiagramDag:
 
     def get_node_by_id(self, node_id) -> DiagramNode:
         for node in self.nodes:
-            if node.get_id() == node_id:
+            if node.id == node_id:
                 return node
         raise ValueError()
 

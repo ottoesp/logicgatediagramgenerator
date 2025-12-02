@@ -30,7 +30,7 @@ class Path:
         self.cells : set[PathCell] = set()
     
     def generate_path(self):
-        lane_y = EDGE_Y_SPACING + self.gutter.lanes[self.start_node.get_id()]
+        lane_y = EDGE_Y_SPACING + self.gutter.lanes[self.start_node.id]
         offset_dest_x = self.dest_node.x + self.gutter.get_node_offset(self.start_node, self.dest_node)
 
         # Draw start, scanning horizontally from start node
@@ -110,7 +110,7 @@ class Gutter:
             grid_cell = self.grid[cell.x][cell.y]
             if len(grid_cell) > 0 and start_id not in grid_cell:
                 collisions += 1
-            grid_cell.add(path.start_node.get_id())
+            grid_cell.add(path.start_node.id)
 
         self.collisions += collisions
         return collisions
@@ -118,9 +118,9 @@ class Gutter:
     def get_node_offset(self, start_node : DiagramNode, dest_node : DiagramNode) -> int:
         # get sibling node
         adj = self.dag.get_adjacency_list()
-        start_id = start_node.get_id()
+        start_id = start_node.id
 
-        siblings = adj[dest_node.get_id()] # Siblings includes start_id
+        siblings = adj[dest_node.id] # Siblings includes start_id
         if len(siblings) == 1:
             return 0
 
@@ -203,7 +203,7 @@ class Gutter:
         block = generate_empty_grid(self.width, self.height, " ")
         for cell in path.cells: # Need to fix marching lines
             try:
-                cell.value = ml_lookup[self.get_ml_code(path.start_node.get_id(), cell.x, cell.y)]
+                cell.value = ml_lookup[self.get_ml_code(path.start_node.id, cell.x, cell.y)]
             except KeyError:
                 cell.value = LineCase.ERROR
             block[cell.x][cell.y] = charset[cell.value]
