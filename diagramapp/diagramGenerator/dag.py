@@ -6,6 +6,9 @@ class DiagramDag:
     def __init__(self) -> None:
         self.nodes: set[DiagramNode] = set()
         self.edges: set[Tuple[str, str]] = set()
+
+        self.adj: dict[str, set[str]] | None = None
+        self.rev_adj: dict[str, set[str]] | None = None
         reset_id_counter()
 
     def get_node_ids(self):
@@ -47,11 +50,15 @@ class DiagramDag:
             print(node)
             print(f'   {adj[node.id]}')
 
-    def get_adjacency_list(self):
-        return get_adjacency_list(self.get_node_ids(), self.edges)
+    def get_adjacency_list(self) -> dict[str, set[str]]:
+        if self.adj is None:
+            self.adj = get_adjacency_list(self.get_node_ids(), self.edges)
+        return self.adj
 
-    def get_rev_adjacency_list(self):
-        return get_rev_adjacency_list(self.get_node_ids(), self.edges)
+    def get_rev_adjacency_list(self) -> dict[str, set[str]]:
+        if self.rev_adj is None:
+            self.rev_adj = get_rev_adjacency_list(self.get_node_ids(), self.edges)
+        return self.rev_adj
 
 def get_adjacency_list(nodes: set[str], edges: set[Tuple[str, str]]):
     adj: dict[str, set[str]] = {u : set() for u in nodes}
