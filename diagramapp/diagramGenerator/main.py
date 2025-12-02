@@ -38,8 +38,7 @@ def generate_diagram(wff, w):
     for optimal levels
     Then https://en.wikipedia.org/wiki/Layered_graph_drawing
     """
-    print(f'Generating diagram of {wff} with width {w}')
-    print(wff)
+
     dag = DiagramDag()
     root = RootNode()
     dag.insert_node(root)
@@ -55,6 +54,3 @@ def generate_diagram(wff, w):
     layer_y_coordinates = assign_coordinates(dag, ordered_layers, 3)
 
     return render_dag(dag, ordered_layers, layer_y_coordinates)
-
-# if len(sys.argv) > 1:
-#     print(generate_diagram(sys.argv[1], int(sys.argv[2])))
