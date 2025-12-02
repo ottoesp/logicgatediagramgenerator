@@ -1,6 +1,4 @@
-from copy import deepcopy
-from ..dag import DiagramDag, DiagramNode, get_adjacency_list
-from functools import reduce
+from ..dag import DiagramDag, DiagramNode
 from .grid import Grid
 from .charsets import default_charset, debug_charset
 from ..nodeType import NodeType, VERTICAL_SIZE
