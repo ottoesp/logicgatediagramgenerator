@@ -56,5 +56,4 @@ def render_dag(dag: DiagramDag, ordered_layers : list[list[str]], layer_y_coordi
         for path in gutter.paths:
             grid.set_block(0, gutter.y, gutter.render_path(path))
 
-    grid.print_with_axis(5)
     return str(grid)

@@ -25,3 +25,12 @@ VERTICAL_SIZE = {
     NodeType.ROOT : 1,
     NodeType.VARIABLE : 1
 }
+
+PREFERS_OFFSET = {
+    NodeType.AND : True,
+    NodeType.OR : True,
+    NodeType.NOT : False,
+    NodeType.DUMMY : False,
+    NodeType.ROOT : False,
+    NodeType.VARIABLE : False
+}
