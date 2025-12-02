@@ -10,16 +10,18 @@ from ..utils import get_edges_to_layer, max_len_of_arrays
 
 def get_max_dimensions(dag: DiagramDag):
     nodes = dag.get_nodes()
-    max_x = 0
-    max_y = 0
+
+    # Initialise max nodes as an arbitrary node
+    max_x_node: DiagramNode = list(nodes)[0]
+    max_y_node: DiagramNode = max_x_node
 
     for node in nodes:
-        if node.x > max_x:
-            max_x = node.x
-        if node.y > max_y:
-            max_y = node.y
+        if node.x > max_x_node.x:
+            max_x_node = node
+        if node.y > max_y_node.y:
+            max_y_node = node
 
-    return max_x + NODE_X_MAX_SIZE, max_y + NODE_Y_MAX_SIZE
+    return max_x_node.x + NODE_X_MAX_SIZE, max_y_node.y + NODE_Y_MAX_SIZE
 
 def generate_gutters(
         dag: DiagramDag, 
