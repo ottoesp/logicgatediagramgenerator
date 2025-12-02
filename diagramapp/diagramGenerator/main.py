@@ -1,6 +1,6 @@
 import sys
 
-from .dag import DiagramDag, get_adjacency_list, get_undirected_adjacency_list
+from .dag import DiagramDag
 from .diagramNode import DummyNode, RootNode
 from .parseWff import parse_wff
 from .autoArrange.layers import get_layers, order_layers
