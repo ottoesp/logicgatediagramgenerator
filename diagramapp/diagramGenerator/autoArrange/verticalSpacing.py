@@ -1,5 +1,10 @@
 from ..dag import DiagramDag
 from ..utils import max_len_of_arrays
+from ..nodeType import VERTICAL_SIZE
+from ..render.rendervars import *
+import sys
+
+INT_INF = sys.maxsize
 
 def space_around(len_layer: int, max_len_layer: int) -> list[int]:
     base = max_len_layer // (len_layer + 1)
@@ -14,15 +19,77 @@ def space_around(len_layer: int, max_len_layer: int) -> list[int]:
 
     return positions
 
-def assign_coordinates(dag: DiagramDag, layers: list[list[str]], layer_y_coordinates: list[int], x_spacing: int):
+def offset_if_inline_with_non_neighbour(dag: DiagramDag, left_layer: list[str], positions: list[int]):
+    adj = dag.get_rev_adjacency_list()
+
+    # For each node, if node is in-line with non-neighbour, offset
+    for i, left_id in enumerate(left_layer):
+        # Non neighbours is the set difference of neighbours and all ids
+        non_neighbour_ids = dag.get_node_ids() - adj[left_id]
+        
+        non_neighbours = [dag.get_node_by_id(right_id) for right_id in non_neighbour_ids]
+        for node in non_neighbours:
+            if positions[i] == node.x:
+                # Offset this and all further nodes in the layer
+                for j in range(i, len(positions)):
+                    positions[j] += 1
+
+                break
+
+def align_inline_with_neighbour(dag: DiagramDag, left_layer: list[str], positions: list[int]):
+    adj = dag.get_rev_adjacency_list()
+
+    # For each node, if node can be in-line with neighbour without intersection, make inline
+    for i, left_id in enumerate(left_layer):
+        neighbours = [dag.get_node_by_id(right_id) for right_id in adj[left_id]]
+        
+        # Calculate the range of positions the node may take without overlapping
+        bounded_above = 0 if i == 0 else positions[i - 1] + VERTICAL_SIZE[dag.get_node_by_id(left_layer[i - 1]).nodeType] + NODE_X_BETWEEN
+        bounded_below = INT_INF if i == len(left_layer) - 1 else positions[i + 1] - (VERTICAL_SIZE[dag.get_node_by_id(left_id).nodeType] + NODE_X_BETWEEN)
+
+        # Find a neighbour with an x value within that range and set it as the new position
+        for neighbour in neighbours:
+            if neighbour.x <= bounded_below and neighbour.x >= bounded_above:
+                positions[i] = neighbour.x
+                break
+          
+def determine_layer_y_coordinates(layers: list[list[str]]) -> list[int]:
+    y_vals = [0 for _ in layers]
+
+    y_offset = 0
+
+    for i, layer in enumerate(layers):
+        y_vals[i] = y_offset
+        y_offset += NODE_Y_MAX_SIZE + len(layer) * LINE_Y_SPACING + 2 * EDGE_Y_SPACING
+ 
+    return y_vals
+  
+
+def assign_coordinates(dag: DiagramDag, layers: list[list[str]], x_spacing: int):
     max_len_layer = max_len_of_arrays(layers)
 
-    root = dag.get_node_by_id(layers[-1][0])
-    root.set_coordinates(max_len_layer*x_spacing//2, layer_y_coordinates[-1])
+    layer_y_coordinates = determine_layer_y_coordinates(layers)
     
-    for i in range(len(layers) - 2, -1, -1):
-        left_layer = layers[i]
-        right_layer = layers[i + 1]
+    # Set the end node to be centred
+    root = dag.get_node_by_id(layers[-1][0])
+    root.set_coordinates(max_len_layer*x_spacing // 2, layer_y_coordinates[-1])
 
+    # Loop through the layers backwards from the second last    
+    for layer_idx in range(len(layers) - 2, -1, -1):
+        left_layer = layers[layer_idx]
+        right_layer = layers[layer_idx + 1]
+
+        # Calculate intitial positioning
+        positions = [pos * x_spacing for pos in space_around(len(left_layer), max_len_layer)]
+        
+        offset_if_inline_with_non_neighbour(dag, left_layer, positions)
+
+        align_inline_with_neighbour(dag, left_layer, positions)
+
+        # Set the coordinates of each node
+        for i, left_id in enumerate(left_layer):
+            dag.get_node_by_id(left_id).set_coordinates(positions[i], layer_y_coordinates[layer_idx])
+
+    return layer_y_coordinates
 
     
