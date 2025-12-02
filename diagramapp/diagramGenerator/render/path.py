@@ -8,14 +8,6 @@ from .charsets import default_charset
 from ..utils import generate_empty_grid
 from .laneAssignment import get_optimal_lanes
 
-class PathCell:
-    def __init__(self, x : int, y : int, value : LineCase | MiscVisual = MiscVisual.EMPTY):
-        self.x = x
-        self.y = y
-        self.value = value
-
-    def __repr__(self):
-        return f'({self.x},{self.y}).{self.value.name}'
 
 class Path:
     def __init__(self, start_node : DiagramNode, dest_node : DiagramNode, gutter):
@@ -27,7 +19,7 @@ class Path:
         self.x = min(start_node.x, dest_node.x)
         self.y = min(start_node.y, dest_node.y)
 
-        self.cells : set[PathCell] = set()
+        self.cells : set[tuple[int, int]] = set()
     
     def generate_path(self):
         lane_y = EDGE_Y_SPACING + self.gutter.lanes[self.start_node.id]
@@ -50,10 +42,9 @@ class Path:
             self.add_path_cell(offset_dest_x, y)
     
     def add_path_cell(
-            self, x: int, y: int,
-            value : LineCase | MiscVisual = MiscVisual.EMPTY
+            self, x: int, y: int
     ) -> None:
-        self.cells.add(PathCell(x, y, value))
+        self.cells.add((x, y))
 
 class Gutter:
     def __init__(self, y : int, width : int, height : int, dag: DiagramDag, left_layer : list[str], right_layer : list[str]):
@@ -107,7 +98,7 @@ class Gutter:
 
         collisions = 0
         for cell in path.cells:
-            grid_cell = self.grid[cell.x][cell.y]
+            grid_cell = self.grid[cell[0]][cell[1]]
             if len(grid_cell) > 0 and start_id not in grid_cell:
                 collisions += 1
             grid_cell.add(path.start_node.id)
@@ -203,10 +194,10 @@ class Gutter:
         block = generate_empty_grid(self.width, self.height, " ")
         for cell in path.cells: # Need to fix marching lines
             try:
-                cell.value = ml_lookup[self.get_ml_code(path.start_node.id, cell.x, cell.y)]
+                line_type = ml_lookup[self.get_ml_code(path.start_node.id, cell[0], cell[1])]
             except KeyError:
-                cell.value = LineCase.ERROR
-            block[cell.x][cell.y] = charset[cell.value]
+                line_type= LineCase.ERROR
+            block[cell[0]][cell[1]] = charset[line_type]
 
         return "\n".join(["".join(row) for row in block])
 
