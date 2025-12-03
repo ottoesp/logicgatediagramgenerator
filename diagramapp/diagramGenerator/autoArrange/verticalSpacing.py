@@ -5,6 +5,7 @@ from ..render.rendervars import *
 import sys
 
 INT_INF = sys.maxsize
+N_ADJUST_PASSES = 3
 
 def space_around(len_layer: int, max_len_layer: int) -> list[int]:
     base = max_len_layer // (len_layer + 1)
@@ -29,10 +30,10 @@ def offset_if_inline_with_non_neighbour(dag: DiagramDag, left_layer: list[str], 
         
         non_neighbours = [dag.get_node_by_id(right_id) for right_id in non_neighbour_ids]
         for node in non_neighbours:
-            if positions[i] == node.x:
+            if positions[i] in range(node.x, node.x + VERTICAL_SIZE[node.nodeType] - 1):
                 # Offset this and all further nodes in the layer
                 for j in range(i, len(positions)):
-                    positions[j] += 1
+                    positions[j] += VERTICAL_SIZE[node.nodeType]
 
                 break
 
@@ -102,8 +103,8 @@ def assign_coordinates(dag: DiagramDag, layers: list[list[str]], x_spacing: int)
         positions = [pos * x_spacing for pos in space_around(len(left_layer), max_len_layer)]
         
         offset_if_inline_with_non_neighbour(dag, left_layer, positions)
-
-        align_inline_with_neighbour(dag, left_layer, positions)
+        for _ in range(N_ADJUST_PASSES):
+            align_inline_with_neighbour(dag, left_layer, positions)
 
         # Set the coordinates of each node
         for i, left_id in enumerate(left_layer):
