@@ -91,7 +91,6 @@ def get_optimal_lanes(gutter) -> list[str]:
     for k in range(steps ):
         temp = temperature(k)
         new_lanes = random_arbitrary_neighbour(current_lanes)
-        # new_lanes = random_colliding_neighbour(current_lanes, cur_col_dict, current_collisions)
         new_collisions = calculate_collisions(gutter, new_lanes, edges)
 
         acceptance_value = acceptance_function(current_collisions, new_collisions, temp)
@@ -101,10 +100,8 @@ def get_optimal_lanes(gutter) -> list[str]:
             current_collisions = new_collisions
 
         if current_collisions == 0:
-            # print("exiting early")
             break
     
-    print(gutter.collisions)
     gutter.reset()
     return current_lanes
         
