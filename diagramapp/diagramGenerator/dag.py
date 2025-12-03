@@ -30,7 +30,7 @@ class DiagramDag:
     def insert_edge(self, u, v):
         self.edges.add((u, v))
 
-    def get_node_by_id(self, node_id) -> DiagramNode:
+    def get_node_by_id(self, node_id) -> DiagramNode: # USE DICT/HASHMAP
         for node in self.nodes:
             if node.id == node_id:
                 return node
