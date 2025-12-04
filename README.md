@@ -25,9 +25,4 @@ This is a hobby project so allow me to nerd out a bit. (TBC)
 * Improve input validation
 * Include indication of error handling
 * Experiment with parameters of simulated annealing process
-* Add selector on website for input width
-* Add informative text instead of the Hobbit opening lines
-* Add loading indicator while waiting for response (could allow for more SA steps)
-* Add 1 or 2 'spare' lanes in lane allocation to give it some more wiggle room to avoid the dreaded #
 * Fill out 'about the algorithm section'
-* Tweak node placement algorithm, have things more centred
