@@ -26,11 +26,11 @@ def offset_if_inline_with_non_neighbour(dag: DiagramDag, left_layer: list[str], 
     # For each node, if node is in-line with non-neighbour, offset
     for i, left_id in enumerate(left_layer):
         # Non neighbours is the set difference of neighbours and all ids
-        non_neighbour_ids = (dag.get_node_ids() & set(right_layer)) - adj[left_id]
+        non_neighbour_ids = set(right_layer) - adj[left_id]
         
         non_neighbours = [dag.get_node_by_id(right_id) for right_id in non_neighbour_ids]
         for node in non_neighbours:
-            if positions[i] in range(node.x, node.x + VERTICAL_SIZE[node.nodeType] - 1):
+            if positions[i] in range(node.x, node.x + VERTICAL_SIZE[node.nodeType]):
                 # Offset this and all further nodes in the layer
                 for j in range(i, len(positions)):
                     positions[j] += VERTICAL_SIZE[node.nodeType]
