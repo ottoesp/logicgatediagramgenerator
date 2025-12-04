@@ -11,12 +11,38 @@ function onGenerateButtonClick(buttonElement) {
     
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function disableGeneratorButton(buttonElement) {
+    const spinner = document.getElementById('generate-spinner')
+    const buttonText = document.getElementById('generate-text')
+    buttonElement.disabled = true
+
+    spinner.classList.remove("d-none");
+    buttonText.classList.add("d-none");
+}
+
+async function enableGeneratorButton(buttonElement) {
+    await new Promise(r => setTimeout(r, 1000));
+    const spinner = document.getElementById('generate-spinner')
+    const buttonText = document.getElementById('generate-text')
+
+    buttonElement.disabled = false
+
+    spinner.classList.add("d-none");
+    buttonText.classList.remove("d-none");
+}
+
 function fetchGeneratorOutput(buttonElement, input) {
     const url = buttonElement.getAttribute('data-url');
     const outputText = document.getElementById("output");
     const csrftoken = Cookies.get('csrftoken')
 
     const max_width_selector = document.getElementById("max-width-selector")
+
+    disableGeneratorButton(buttonElement)
 
     fetch(url, {
         method: 'POST',
@@ -41,7 +67,10 @@ function fetchGeneratorOutput(buttonElement, input) {
             .catch(error => {
                 console.error('Error:', error);
                 // Handle any errors
-            });
+            })
+            .finally(
+                enableGeneratorButton(buttonElement)
+            );
 }
 
 function inputTooLargeError() {
