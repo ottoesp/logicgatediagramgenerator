@@ -50,7 +50,9 @@
                     class="btn btn-primary"
                     data-url="{% url 'generate' %}"
                     onclick="onGenerateButtonClick(this)">
-                Generate
+                <span id="generate-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                
+                <span id="generate-text">Generate</span>
             </button>
         </div>
         
