@@ -4,8 +4,7 @@ import math
 
 INITIAL_TEMPERATURE = 100
 FINAL_TEMPERATURE = 10**-3
-MAX_STEPS = 1000
-
+MAX_STEPS = 50
 ALPHA = (FINAL_TEMPERATURE/INITIAL_TEMPERATURE)**(1/MAX_STEPS)
 
 def permute(arr: list):
@@ -66,22 +65,17 @@ def acceptance_function(col1: int, col2: int, T: float) -> float:
     else:
         return math.exp(-(col2 - col1)/T)
 
-def calculate_collisions(gutter, lanes: list[str], edges: list[tuple[str, str]]) -> tuple[int, dict[str, int]]:
+def calculate_collisions(gutter, lanes: list[str], edges: list[tuple[str, str]]) -> int:
     gutter.reset()
     lane_dict = {}
     for lane, node_id in enumerate(lanes):
         lane_dict[node_id] = lane
     gutter.lanes = lane_dict
 
-    collisions_per_source: dict[str, int] = dict()
-    for node_id in gutter.left_layer:
-        collisions_per_source[node_id] = 0
-
     for edge in edges:
         collisions = gutter.add_path(edge[0], edge[1])
-        collisions_per_source[edge[0]] += collisions
 
-    return gutter.collisions, collisions_per_source
+    return gutter.collisions
 
 def get_optimal_lanes(gutter) -> list[str]:
     nodes = gutter.left_layer
@@ -91,34 +85,23 @@ def get_optimal_lanes(gutter) -> list[str]:
     
     edges = get_edges_to_layer(gutter.dag, nodes)
     current_lanes = permute(nodes)
-    current_collisions, cur_col_dict = calculate_collisions(gutter, current_lanes, edges) 
-    
-    n_accept = 0
-    n_reject = 0
+    current_collisions = calculate_collisions(gutter, current_lanes, edges) 
 
-    for k in range(MAX_STEPS):
+    steps = MAX_STEPS * len(nodes)
+    for k in range(steps ):
         temp = temperature(k)
-
         new_lanes = random_arbitrary_neighbour(current_lanes)
-        # new_lanes = random_colliding_neighbour(current_lanes, cur_col_dict, current_collisions)
-        new_collisions, new_col_dict = calculate_collisions(gutter, new_lanes, edges)
+        new_collisions = calculate_collisions(gutter, new_lanes, edges)
 
         acceptance_value = acceptance_function(current_collisions, new_collisions, temp)
         if acceptance_value >= random.uniform(0, 1):
 
             current_lanes = new_lanes
-            current_collisions, cur_col_dict = new_collisions, new_col_dict
-
-            n_accept += 1
-
-        else:
-            # print("REJECTED")
-            n_reject += 1
+            current_collisions = new_collisions
 
         if current_collisions == 0:
-            # print("exiting early")
             break
-
+    
     gutter.reset()
     return current_lanes
         
