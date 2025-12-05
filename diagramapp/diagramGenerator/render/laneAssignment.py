@@ -4,8 +4,8 @@ import math
 
 INITIAL_TEMPERATURE = 100
 FINAL_TEMPERATURE = 10**-3
-MAX_STEPS = 50
-ALPHA = (FINAL_TEMPERATURE/INITIAL_TEMPERATURE)**(1/MAX_STEPS)
+MAX_STEPS_PER_NODE = 50
+MAX_STEPS_TOTAL = 200
 
 def permute(arr: list):
     n = len(arr)
@@ -16,8 +16,8 @@ def permute(arr: list):
         output[i], output[swap_to] = output[swap_to], output[i]
     return output
 
-def temperature(time: int) -> float:
-    return INITIAL_TEMPERATURE * (ALPHA ** time)
+def temperature(time: int, alpha: float) -> float:
+    return INITIAL_TEMPERATURE * (alpha ** time)
 
 def random_arbitrary_neighbour(arr: list) -> list:
     output = arr.copy()
@@ -87,9 +87,11 @@ def get_optimal_lanes(gutter) -> list[str]:
     current_lanes = permute(nodes)
     current_collisions = calculate_collisions(gutter, current_lanes, edges) 
 
-    steps = MAX_STEPS * len(nodes)
+    steps = min(MAX_STEPS_PER_NODE * len(nodes), MAX_STEPS_TOTAL)
+    alpha = (FINAL_TEMPERATURE/INITIAL_TEMPERATURE)**(1/steps)
+
     for k in range(steps ):
-        temp = temperature(k)
+        temp = temperature(k, alpha)
         new_lanes = random_arbitrary_neighbour(current_lanes)
         new_collisions = calculate_collisions(gutter, new_lanes, edges)
 
