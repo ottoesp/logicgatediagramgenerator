@@ -12,7 +12,7 @@ To run the django server, cd into the root directory and run the following comma
 >> python manage.py runserver
 ```
 ### Diagram generator function
-Under ```logicgatediagramgenerator/diagramGenerator/``` there is a main.py file. From this file, import the function ```generate_diagram(wff, w)``` which takes a string input of the logic statement and a maximum width of the diagram.
+Run the file ```logicgatediagramgenerator/diagramGenerator/profiler.py "<Logical Sentence>"  <Maximum node width>``` modify this to supress profiler information 
 ## About the algorithm
 This is a hobby project so allow me to nerd out a bit. (TBC)
 ### Input parsing
