@@ -13,12 +13,6 @@ To run the django server, cd into the root directory and run the following comma
 ```
 ### Diagram generator function
 Run the file ```logicgatediagramgenerator/diagramGenerator/profiler.py "<Logical Sentence>"  <Maximum node width>``` modify this to supress profiler information 
-## About the algorithm
-This is a hobby project so allow me to nerd out a bit. (TBC)
-### Input parsing
-### Layering algorithm
-### Lane Assignment
-### Rendering
 ## TODO
 * Include more types of logic gates
   * XOR, NOR, XNOR (this one may be weird since it is >3 characters)
