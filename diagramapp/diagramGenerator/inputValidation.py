@@ -13,6 +13,9 @@ def is_valid_input(sentence: str, max_width: str) -> ValidationResponse:
     if len(sentence) > MAX_LEN_INPUT:
         valid = False
         reasons.append(f'Input size exceeds {MAX_LEN_INPUT}')
+    elif len(sentence) == 0:
+        valid = False
+        reasons.append(f'Input is empty')
     try:
         w = int(max_width)
         if w < 0:
