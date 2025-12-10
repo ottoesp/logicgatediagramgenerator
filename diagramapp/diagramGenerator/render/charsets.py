@@ -32,7 +32,7 @@ default_charset: dict[LineCase | NodeType | MiscVisual, str] = {
 
     MiscVisual.EMPTY : " ",
     NodeType.DUMMY : '───',
-    NodeType.ROOT : "$"
+    NodeType.ROOT : "@"
 
 }
 
