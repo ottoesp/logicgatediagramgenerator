@@ -10,6 +10,7 @@ default_charset: dict[LineCase | NodeType | MiscVisual, str] = {
     NodeType.AND : "and\nand",
     NodeType.OR : "or─\nor ",
     NodeType.NOT : "not",
+    NodeType.XOR : "xor\nxor",
 
     LineCase.HORZ_VERT : "┼",
     LineCase.HORZ_DOWN : "┬",
