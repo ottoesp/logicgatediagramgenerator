@@ -35,6 +35,15 @@ async function enableGeneratorButton(buttonElement) {
     buttonText.classList.remove("d-none");
 }
 
+async function setTemporaryOutputBorder(temp_border_class) {
+    const outputBox = document.getElementById('output-div')
+    outputBox.classList.add(temp_border_class);
+
+    await new Promise(r => setTimeout(r, 1000));
+
+    outputBox.classList.remove(temp_border_class);
+}
+
 function fetchGeneratorOutput(buttonElement, input) {
     const url = buttonElement.getAttribute('data-url');
     const outputText = document.getElementById("output");
@@ -61,12 +70,16 @@ function fetchGeneratorOutput(buttonElement, input) {
                 return response.json(); // If expecting a JSON response
             })
             .then(data => {
-                
-                outputText.textContent = data.output;
+                if (data.ok) {
+                    outputText.textContent = data.output;
+                    setTemporaryOutputBorder('border-success')
+                } else {
+                    outputText.textContent = data.reasons;
+                    setTemporaryOutputBorder('border-danger')
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle any errors
             })
             .finally(
                 enableGeneratorButton(buttonElement)
