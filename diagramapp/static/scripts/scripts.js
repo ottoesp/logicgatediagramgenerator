@@ -1,14 +1,11 @@
-const MAX_INPUT_SIZE = 200
+function onCopyButtonClick(buttonElement) {
+    const outputBox = document.getElementById('output-div')
+    navigator.clipboard.writeText(outputBox.textContent)
+}
 
 function onGenerateButtonClick(buttonElement) {
-    
     let input = document.getElementById("maininput").value
-    if (input.length > MAX_INPUT_SIZE) {
-        inputTooLargeError()
-    } else {
-        fetchGeneratorOutput(buttonElement, input)
-    }
-    
+    fetchGeneratorOutput(buttonElement, input)
 }
 
 function sleep(ms) {
@@ -45,9 +42,11 @@ async function setTemporaryOutputBorder(temp_border_class) {
 }
 
 function fetchGeneratorOutput(buttonElement, input) {
-    const url = buttonElement.getAttribute('data-url');
     const outputText = document.getElementById("output");
+    const cpyBtn = document.getElementById("cpy-btn")
+
     const csrftoken = Cookies.get('csrftoken')
+    const url = buttonElement.getAttribute('data-url');
 
     const max_width_selector = document.getElementById("max-width-selector")
 
@@ -73,9 +72,11 @@ function fetchGeneratorOutput(buttonElement, input) {
                 if (data.ok) {
                     outputText.textContent = data.output;
                     setTemporaryOutputBorder('border-success')
+                    cpyBtn.classList.remove('disabled')
                 } else {
                     outputText.textContent = data.reasons;
                     setTemporaryOutputBorder('border-danger')
+                    cpyBtn.classList.add('disabled')
                 }
             })
             .catch(error => {

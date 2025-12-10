@@ -6,7 +6,8 @@
     <title>Logic Gate Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'stylesheets/styles.css' %}">
 </head>
@@ -31,8 +32,14 @@
             </div>
         </div>
         <div class="row">
-            <div id="output-div" class="col bg-light border border-2 rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
-                <pre id="output" class="m-0 w-100 lh-1 output-text-min-height">
+            <div id="output-div" class="col position-relative bg-light border border-2 rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
+                <pre id="output" class="m-0 w-100 lh-1 output-text-min-height"></pre>
+                <button id="cpy-btn" 
+                    class="btn btn-light btn-sm align-self-start disabled top-0 end-0 position-absolute m-2"
+                    onclick="onCopyButtonClick(this)"    
+                >
+                    <i class="bi bi-copy"></i>
+                </button>
             </div>
         </div>
         <div class="row mb-3 mx-0 gap-3">
