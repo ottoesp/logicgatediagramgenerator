@@ -15,3 +15,4 @@ To run the django server, cd into the root directory and run the following comma
 Run the file ```logicgatediagramgenerator/diagramGenerator/profiler.py "<Logical Sentence>"  <Maximum node width>``` modify this to supress profiler information 
 ## TODO
 * Host
+* **Add Copy Button**
