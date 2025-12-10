@@ -1,11 +1,5 @@
 from .dag import DiagramDag
 
-def index_of_containing_set(target: str, sets: list[set[str]]):
-    for i, s in enumerate(sets):
-        if target in s:
-            return i
-    return  -1
-
 def get_edges_to_layer(dag: DiagramDag, layer : list[str]):
     adj = dag.get_rev_adjacency_list()
     edges: list[tuple[str, str]] = []

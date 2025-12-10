@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from diagramapp.diagramGenerator.main import generate_diagram
+from diagramapp.diagramGenerator.inputValidation import is_valid_input
 
 def index(request):
     template = loader.get_template('index.html')
@@ -13,11 +14,17 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def generate(request):
-    wff = request.body.decode('utf-8')
-    try:
-        max_width = int(request.headers.get('max-diagram-width'))
-        output = generate_diagram(wff, max_width)
-    except Exception as e:
-        output = str(e)
-    return JsonResponse({"output": output})
-# Create your views here.
+    sentence = request.body.decode('utf-8')
+
+    validation_response = is_valid_input(sentence, request.headers.get('max-diagram-width'))
+    if not validation_response.valid:
+        return JsonResponse({"ok": False, "reasons": validation_response.reasons})
+    
+    max_width = int(request.headers.get('max-diagram-width'))
+    generator_response = generate_diagram(sentence, max_width)
+    
+    return JsonResponse({
+        "ok" : generator_response.ok,
+        "output" : generator_response.output,
+        "reasons" : generator_response.reasons
+    })
