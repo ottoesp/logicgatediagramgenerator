@@ -16,5 +16,4 @@ To run the django server, cd into the root directory and run the following comma
 ### Diagram generator function
 Run the file ```logicgatediagramgenerator/diagramGenerator/profiler.py "<Logical Sentence>"  <Maximum node width>``` modify this to supress profiler information 
 ## TODO
-* Host
-* **Add Copy Button**
+* Stretch goal might be to make variables selectable such that you can turn them on and off and have the truthiness flow through the diagram
