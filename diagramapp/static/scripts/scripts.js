@@ -14,24 +14,27 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function disableGeneratorButton(buttonElement) {
+async function disableGeneratorButton(buttonElement) {
     const spinner = document.getElementById('generate-spinner')
     const buttonText = document.getElementById('generate-text')
     buttonElement.disabled = true
 
     spinner.classList.remove("d-none");
     buttonText.classList.add("d-none");
+
+    await new Promise(requestAnimationFrame);
+
 }
 
 async function enableGeneratorButton(buttonElement) {
     const spinner = document.getElementById('generate-spinner')
     const buttonText = document.getElementById('generate-text')
+
     spinner.classList.add("d-none");
     buttonText.classList.remove("d-none");
-    
-    await new Promise(r => setTimeout(r, 1000));
 
-    buttonElement.disabled = false
+    await new Promise(r => setTimeout(r, 1000));
+    buttonElement.disabled = false;
 
 }
 
@@ -92,7 +95,7 @@ function fetchGeneratorOutput(buttonElement, input) {
                 console.error('Error:', error);
             })
             .finally(
-                enableGeneratorButton(buttonElement)
+                ()=>enableGeneratorButton(buttonElement)
             );
 }
 
