@@ -14,7 +14,7 @@ body {
 }
 
 #output {
-    font-family: monospace;
+    font-family: 'Roboto Mono', monospace;
     white-space: pre;       /* do NOT wrap lines */
     overflow-x: auto;       /* allow horizontal scroll if too wide */
     display: block;
