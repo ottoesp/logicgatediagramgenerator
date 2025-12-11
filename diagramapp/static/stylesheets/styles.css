@@ -1,8 +1,13 @@
+@font-face {
+    font-family: "CascadiaMono";
+    src: url("/static/app/fonts/CascadiaMono-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
   font-family: verdana;
 }
-
-
 
 .output-text-min-height {
   min-height: 1rem;
@@ -14,7 +19,7 @@ body {
 }
 
 #output {
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'CascadiaMono', monospace;
     white-space: pre;       /* do NOT wrap lines */
     overflow-x: auto;       /* allow horizontal scroll if too wide */
     display: block;
