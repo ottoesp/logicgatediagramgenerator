@@ -24,6 +24,7 @@ body {
     overflow-x: auto;       /* allow horizontal scroll if too wide */
     display: flex;
     align-items: center;
+    justify-content: center;
     max-width: 100%;
     font-size: 14px;
     line-height: 1;
