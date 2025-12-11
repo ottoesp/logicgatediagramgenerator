@@ -6,10 +6,13 @@ from django_ratelimit.decorators import ratelimit  # type: ignore
 from diagramapp.diagramGenerator.main import generate_diagram
 from diagramapp.diagramGenerator.inputValidation import is_valid_input
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
 def index(request):
     template = loader.get_template('index.html')
     context = {
-        'fruits': ['Apple', 'Banana', 'Cherry'],
+        # Example context; you can add whatever your page needs
         'copyDisabled': True,
     }
     return HttpResponse(template.render(context, request))
