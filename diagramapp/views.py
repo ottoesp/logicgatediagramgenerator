@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from django_ratelimit.decorators import ratelimit  # type: ignore
 
 from diagramapp.diagramGenerator.main import generate_diagram
 from diagramapp.diagramGenerator.inputValidation import is_valid_input
@@ -13,6 +14,7 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
+@ratelimit(key='ip', rate='10/m')
 def generate(request):
     sentence = request.body.decode('utf-8')
 

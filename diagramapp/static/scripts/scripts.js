@@ -5,7 +5,9 @@ function onCopyButtonClick(buttonElement) {
 
 function onGenerateButtonClick(buttonElement) {
     let input = document.getElementById("maininput").value
+
     fetchGeneratorOutput(buttonElement, input)
+
 }
 
 function sleep(ms) {
@@ -64,6 +66,11 @@ function fetchGeneratorOutput(buttonElement, input) {
             .then(response => {
                 // Check if the request was successful
                 if (!response.ok) {
+                    if (response.status == 403) {
+                        outputText.textContent = "Request blocked, most common reason is rate limiting.\nPlease try again later."
+                        setTemporaryOutputBorder('border-danger')
+                        cpyBtn.classList.add('disabled')
+                    }
                     throw new Error('Network response was not ok');
                 }
                 return response.json(); // If expecting a JSON response
