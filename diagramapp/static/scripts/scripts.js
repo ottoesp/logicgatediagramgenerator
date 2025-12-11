@@ -57,6 +57,7 @@ function fetchGeneratorOutput(buttonElement, input) {
     fetch(url, {
         method: 'POST',
         headers: {
+            'Content-Type': 'text/plain',
             'max-diagram-width' : max_width_selector.value,
             'X-CSRFToken': csrftoken,
         },
