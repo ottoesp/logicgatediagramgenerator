@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Tuple
 from .nodeType import NodeType, SINGLE_INPUT_GATES, DOUBLE_INPUT_GATES
 from .diagramNode import *
@@ -107,7 +108,7 @@ def insert_dummy_edges(dag, layers):
             else:
                 dag.insert_edge(prev, v)
 
-type ParseTree = tuple[NodeType, ParseTree, ParseTree] | tuple[NodeType, ParseTree] | tuple[NodeType, str]
+ParseTree = tuple[NodeType, "ParseTree", "ParseTree"] | tuple[NodeType, "ParseTree"] | tuple[NodeType, str]
 
 def build_dag_recur(dag: DiagramDag, parent: DiagramNode, parse_tree: ParseTree) -> None:
     if parse_tree[0] == NodeType.VARIABLE:

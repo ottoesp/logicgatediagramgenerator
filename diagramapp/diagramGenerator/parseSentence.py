@@ -1,3 +1,4 @@
+from __future__ import annotations
 from .nodeType import STRING_REPRESENTATION, TYPE_FROM_STRING_REPRESENTATION, NodeType, BINDING_STRENGTH, DOUBLE_INPUT_GATES, SINGLE_INPUT_GATES
 from .nodeType import NodeType
 
@@ -46,7 +47,7 @@ def tokenise_sentence(sentence: str) -> list[str]:
 
     return tokens
 
-type ParseTree = tuple[NodeType, ParseTree, ParseTree] | tuple[NodeType, ParseTree] | tuple[NodeType, str]
+ParseTree = tuple[NodeType, "ParseTree", "ParseTree"] | tuple[NodeType, "ParseTree"] | tuple[NodeType, str]
 
 def parse_tokens(tokens: list[str]) -> ParseTree:
     bracket_depth = 0
