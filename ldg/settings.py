@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [] # type: ignore
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]'] # type: ignore
 
 
 SECRET_KEY = config("SECRET_KEY")
@@ -53,7 +53,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ROOT_URLCONF = 'ldg.urls'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 TEMPLATES = [
     {
