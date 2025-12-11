@@ -2,9 +2,7 @@ body {
   font-family: verdana;
 }
 
-.output-min-height {
-  min-height: 15em;
-}
+
 
 .output-text-min-height {
   min-height: 1rem;
@@ -13,4 +11,15 @@ body {
 
 .mb-20vh {
   margin-bottom: 20vh !important;
+}
+
+#output {
+    font-family: monospace;
+    white-space: pre;       /* do NOT wrap lines */
+    overflow-x: auto;       /* allow horizontal scroll if too wide */
+    display: block;
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 1;
+    min-height: 15em;
 }
