@@ -22,7 +22,8 @@ body {
     font-family: 'CascadiaMono', monospace;
     white-space: pre;       /* do NOT wrap lines */
     overflow-x: auto;       /* allow horizontal scroll if too wide */
-    display: block;
+    display: flex;
+    align-items: center;
     max-width: 100%;
     font-size: 14px;
     line-height: 1;
