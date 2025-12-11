@@ -24,14 +24,15 @@ function disableGeneratorButton(buttonElement) {
 }
 
 async function enableGeneratorButton(buttonElement) {
-    await new Promise(r => setTimeout(r, 1000));
     const spinner = document.getElementById('generate-spinner')
     const buttonText = document.getElementById('generate-text')
+    spinner.classList.add("d-none");
+    buttonText.classList.remove("d-none");
+    
+    await new Promise(r => setTimeout(r, 1000));
 
     buttonElement.disabled = false
 
-    spinner.classList.add("d-none");
-    buttonText.classList.remove("d-none");
 }
 
 async function setTemporaryOutputBorder(temp_border_class) {
