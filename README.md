@@ -6,6 +6,8 @@ This repo includes both the django website and diagram generating module.
 * Automatically generates diagrams from logical phrases
 * Control the maximum width (in gates/variables) of diagrams to fit your needs
 ## Get Started
+### Using via the website
+This tool is currently hosted at https://ottoesp.pythonanywhere.com/
 ### Running the server
 To run the django server, cd into the root directory and run the following command
 ```
