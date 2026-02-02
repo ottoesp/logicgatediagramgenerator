@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ottoesp.pythonanywhere.com', '.localhost', '127.0.0.1', '[::1]'] # type: ignore
 
@@ -53,15 +53,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SECURE_HSTS_SECONDS = 60
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 60
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'ldg.urls'
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 
 TEMPLATES = [
     {
