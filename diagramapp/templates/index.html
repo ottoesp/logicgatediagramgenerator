@@ -12,15 +12,21 @@
     <link rel="stylesheet" href="{% static 'stylesheets/styles.css' %}">
 </head>
 <body>
-    <div class="container mt-5 mb-20vh px-5">
-        <div class="row mb-4">
-            <div class="col">
-                <h1 class="display-3">Logic Gate Generator</h1>
-
+    <div class="container mt-5 mb-20vh">
+        <div class="row gy-2">
+            <div class="col-12 col-md-8">
+                <h1 class="display-3">Logic Diagram Generator</h1>
             </div>
-            <div class="col-3 d-flex flex-wrap align-items-center justify-content-end gap-1">
-                <a class="github-button" href="https://github.com/ottoesp" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" aria-label="Follow @ottoesp on GitHub">Follow @ottoesp</a>
-                <a class="github-button" href="https://github.com/ottoesp/logicgatediagramgenerator" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-star" data-size="large" aria-label="Star ottoesp/logicgatediagramgenerator on GitHub">Star</a>
+            <div class="col-12 col-md-4 d-flex flex-nowrap align-items-center justify-content-center justify-content-lg-end gap-2">
+                <a href="https://ottoesperson.com" class="btn btn-outline-primary" title="Home">
+                    <i class="bi bi-house-fill"></i>
+                </a>
+                <a href="https://github.com/ottoesp" class="btn btn-outline-primary text-nowrap" title="Follow on GitHub">
+                    <i class="bi bi-github"></i> <span class="d-none d-sm-inline">@ottoesp</span>
+                </a>
+                <a href="https://github.com/ottoesp/logicgatediagramgenerator" class="btn btn-outline-primary text-nowrap" title="Star on GitHub">
+                    <i class="bi bi-star-fill"></i>
+                </a>
             </div>
         </div>
         <div class="row mb-4">
@@ -31,7 +37,7 @@
                 </p>
             </div>
         </div>
-        <div class="row">
+        <div class="row mx-auto">
             <div id="output-div" class="col position-relative bg-light border border-2 rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
                 <pre id="output" class="m-0 w-100"></pre>
                 <button id="cpy-btn" 
@@ -43,8 +49,8 @@
             </div>
         </div>
         <div class="row mb-3 mx-0 gap-3">
-            <div class="col-3 border rounded p-3 text-center">
-                <label for="max-width-selector" class="form-label">Maximum Width</label>
+            <div class="col-12 col-md-4 border rounded p-3 text-center">
+                <label for="max-width-selector" class="form-label">Width</label>
                 <input type="range" id="max-width-selector" class="form-range" min="2" max="10" step="1" value="4">
             </div>
             <div class="col border rounded p-3">

@@ -5,10 +5,6 @@
     font-style: normal;
 }
 
-body {
-  font-family: verdana;
-}
-
 .output-text-min-height {
   min-height: 1rem;
   overflow: hidden;
