@@ -1,30 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Logic Gate Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap">
     {% load static %}
     <link rel="stylesheet" href="{% static 'stylesheets/styles.css' %}">
 </head>
+
 <body>
     <div class="container mt-5 mb-20vh">
         <div class="row gy-2">
             <div class="col-12 col-md-8">
                 <h1 class="display-3">Logic Diagram Generator</h1>
             </div>
-            <div class="col-12 col-md-4 d-flex flex-nowrap align-items-center justify-content-center justify-content-lg-end gap-2">
+            <div
+                class="col-12 col-md-4 d-flex flex-nowrap align-items-center justify-content-center justify-content-lg-end gap-2">
                 <a href="https://ottoesperson.com" class="btn btn-outline-primary" title="Home">
                     <i class="bi bi-house-fill"></i>
                 </a>
-                <a href="https://github.com/ottoesp" class="btn btn-outline-primary text-nowrap" title="Follow on GitHub">
+                <a href="https://github.com/ottoesp" class="btn btn-outline-primary text-nowrap"
+                    title="Follow on GitHub">
                     <i class="bi bi-github"></i> <span class="d-none d-sm-inline">@ottoesp</span>
                 </a>
-                <a href="https://github.com/ottoesp/logicgatediagramgenerator" class="btn btn-outline-primary text-nowrap" title="Star on GitHub">
+                <a href="https://github.com/ottoesp/logicgatediagramgenerator"
+                    class="btn btn-outline-primary text-nowrap" title="Star on GitHub">
                     <i class="bi bi-star-fill"></i>
                 </a>
             </div>
@@ -33,50 +39,202 @@
             <div class="col">
                 <p class="h3">What is this website about?</p>
                 <p>
-                    This is a tool for quickly and easily generating text based logic diagrams with minimal fuss. While this is largley a hobby project with many interesting algorithms behind it, some applications in edu-tech have limited support for images as inputs. Moreover, text-based diagrams are quite hard to make by hand (especially with non-standard characters) so a generator may be helpful. 
+                    This is a tool for quickly and easily generating text based logic diagrams with minimal fuss. While
+                    this is largley a hobby project with many interesting algorithms behind it, some applications in
+                    edu-tech have limited support for images as inputs. Moreover, text-based diagrams are quite hard to
+                    make by hand (especially with non-standard characters) so a generator may be helpful.
                 </p>
             </div>
         </div>
         <div class="row mx-auto">
-            <div id="output-div" class="col position-relative bg-light border border-2 rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
+            <div id="output-div"
+                class="col position-relative bg-light border border-2 rounded p-3 mb-3 output-min-height d-flex justify-content-center align-items-center text-center">
                 <pre id="output" class="m-0 w-100"></pre>
-                <button id="cpy-btn" 
+                <button id="cpy-btn"
                     class="btn btn-light btn-sm align-self-start disabled top-0 end-0 position-absolute m-2"
-                    onclick="onCopyButtonClick(this)"    
-                >
+                    onclick="onCopyButtonClick(this)">
                     <i class="bi bi-copy"></i>
                 </button>
             </div>
         </div>
-        <div class="row mb-3 mx-0 gap-3">
+        <div class="row mb-3 mx-0 g-3">
             <div class="col-12 col-md-4 border rounded p-3 text-center">
                 <label for="max-width-selector" class="form-label">Width</label>
                 <input type="range" id="max-width-selector" class="form-range" min="2" max="10" step="1" value="4">
             </div>
             <div class="col border rounded p-3">
-                <p>Enter an input using any <b>single alphabetical characters</b> for variables, then <b>"and", "or", "xor", and "not"</b> for logic gates. Use parenthesises <b>"(", ")"</b> to ensure that your input is parsed in the intended order.</p>
+                <p>Enter an input using any <b>single alphabetical characters</b> for variables, then <b>"and", "or",
+                        "xor", and "not"</b> for logic gates. Use parenthesises <b>"(", ")"</b> to ensure that your
+                    input is parsed in the intended order.</p>
             </div>
         </div>
         <div class="input-group">
             <input type="text" class="form-control" id="maininput" placeholder="Try A and (B or C)...">
-            <button id="generateButton"
-                    class="btn btn-primary"
-                    data-url="{% url 'generate' %}"
-                    onclick="onGenerateButtonClick(this)">
-                <span id="generate-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                
+            <button id="generateButton" class="btn btn-primary" data-url="{% url 'generate' %}"
+                onclick="onGenerateButtonClick(this)">
+                <span id="generate-spinner" class="spinner-border spinner-border-sm d-none" role="status"
+                    aria-hidden="true"></span>
+
                 <span id="generate-text">Generate</span>
             </button>
         </div>
-        
+        <div class="row gy-3 mt-5">
+            <div class="col-12">
+                <h3>About the Algorithm</h3>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Context Free Grammar Inspired Parsing Algorithm
+                        </h3>
+                        <p class="card-text">
+                            The first stage of the algorithm parses logical sentence into a structured parse tree using
+                            a two-stage approach.
+                        </p>
+                        <p class="card-text">
+                            First, the input string is tokenized character by character into variables, operators (and,
+                            or, not, xor), and parentheses. The parser then performs a recursive descent pass that scans
+                            tokens to locate the weakest binding operator that is not enclosed by parenthesis.
+                        </p>
+                        <p class="card-text">
+                            Then the expression is recursively divided at this weakest bound operator to construct
+                            binary or unary tree nodes. The result is a recursive tree representation of the logical
+                            sentence. This tree is then processed, grouping individual variables at the leaf nodes as
+                            unique objects forming a directed acyclic graph (DAG). </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Layered Graph Drawing Algorithm </h3>
+                        <p class="card-text">
+                            Inspired by <a href="https://en.wikipedia.org/wiki/Layered_graph_drawing">this algorithm</a>
+                            , the layered graph drawing algorithm assigns nodes of the DAG to horizontal layers while
+                            respecting width constraints and minimizing visual clutter.
+                        </p>
+                        <p class="card-text">
+                            It begins with a transitive reduction pass that removes keeps only the longest edges that
+                            maintains reachability. Dropped edges are later reintroduced.
+                        </p>
+                        <p class="card-text">
+                            Nodes are then greedily placed into the earliest valid layer such that no descendants appear
+                            above them and the layer’s width budget is not exceeded. This process is detailed in the
+                            <a href="https://en.wikipedia.org/wiki/Coffman%E2%80%93Graham_algorithm">Coffman-Graham
+                                algorithm</a>.
+                        </p>
+                        <p class="card-text">
+                            Edges that run across multiple layers are split up into multiple smaller edges with dummy
+                            nodes on each intermediate layer. Within each layer, node ordering is refined using a
+                            barycentre heuristic that sorts nodes by the average position of their parents to reduce
+                            crossings. The nodes then undergo refinement passes that distribute nodes evenly, prevent
+                            misleading alignments, and gently pull nodes toward their connected neighbours.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Simulated Annealing for Lane Assignment
+                        </h3>
+                        <p class="card-text">
+                            A major goal of this project was to make the connections between nodes run along simple
+                            paths and avoid collisions with paths from sibling nodes. To achieve this, the algorithm
+                            uses a rigid structure for each path, where each node is given a unique “lane” where its
+                            paths can move vertically. Outside of a node’s lane, its paths can only run horizontally.
+                        </p>
+                        <p class="card-text">
+                            However, the process of assigning these lanes in a manner that minimises collisions, where
+                            paths overlap, is NP-hard. As such a heuristic optimisation algorithm such as <a
+                                href="https://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> must be
+                            applied.
+                        </p>
+                        <p class="card-text">
+                            The process starts from a random lane ordering and computes an initial temperature value
+                            based on how many grid cells are shared by multiple paths. At each step, a neighbouring
+                            solution is generated by swapping two lanes, and the new configuration is accepted if it
+                            improves the collision count, or a worse solution is probabilistically accepted based on the
+                            current temperature.
+                        </p>
+                        <p class="card-text">
+                            The temperature follows an exponential cooling schedule with a bounded number of iterations,
+                            allowing early exploration at higher temperatures and gradual convergence towards a likely
+                            suitable solution as it cools. The algorithm terminates early if a solution is found that
+                            contains zero collisions.
+                        </p>
+                        <p class="card-text">
+                            Collisions are computed by explicitly tracing each edge’s path and counting overlapping grid
+                            cells. Collision prediction is a point of possible optimisation for this algorithm.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Marching Line Rendering Algorithm
+                        </h3>
+                        <p class="card-text">
+                            The final rendering stage converts routed paths into Unicode box drawing characters using a
+                            marching square inspired approach.
+                        </p>
+                        <p class="card-text">
+                            The algorithm conducts a linear pass over each grid cell and encodes its local neighbourhood
+                            as a five-character signature indicating whether the same path, a different path, or no path
+                            occupies each adjacent direction.
+                        </p>
+                        <p class="card-text">
+                            Each code is then translated into a Unicode box drawing character, this logic ensures clean
+                            connections with nodes, readable collisions, and visually distinct path branching.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>    
+
+        <footer class="bg-body-tertiary py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Logic Gate Generator</h5>
+                </div>
+                <div class="col-12 col-md-4 d-flex flex-nowrap align-items-center justify-content-center gap-2">
+                    <a href="https://ottoesperson.com" class="btn btn-outline-primary" title="Home">
+                        <i class="bi bi-house-fill"></i>
+                    </a>
+                    <a href="https://github.com/ottoesp" class="btn btn-outline-primary text-nowrap" title="Follow on GitHub">
+                        <i class="bi bi-github"></i> <span class="d-none d-sm-inline">@ottoesp</span>
+                    </a>
+                    <a href="https://github.com/ottoesp/melbournepedestrianinvestigation" class="btn btn-outline-primary text-nowrap" title="Star on GitHub">
+                        <i class="bi bi-star-fill"></i>
+                    </a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col text-center text-secondary small">
+                    <p class="mb-0">Copyright (c) 2026 Otto Esperson</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 
     {% load static %}
     <script src="{% static 'scripts/scripts.js' %}"></script>
 
 </body>
+
 </html>

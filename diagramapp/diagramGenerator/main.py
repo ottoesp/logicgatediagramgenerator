@@ -22,7 +22,7 @@ class GeneratorResponse:
 
 def generate_diagram(sentence: str, max_width: int) -> GeneratorResponse:
     """
-    Then use Kahn's algorithm https://en.wikipedia.org/wiki/Topological_sorting
+    Then use Kahn's algorithm ttps://en.wikipedia.org/wiki/Topological_sorting
     for topological sorting into Coffman-Grahams Algorithm https://en.wikipedia.org/wiki/Coffman%E2%80%93Graham_algorithm
     for optimal levels
     Then https://en.wikipedia.org/wiki/Layered_graph_drawing
