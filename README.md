@@ -9,7 +9,7 @@ This repo includes both the django website and diagram generating module.
 ### Using via the website
 This tool is currently hosted at https://generator.ottoesperson.com
 ### Running the server
-To install requirments (preferably on a virtual environment) run the following command.
+To install dependencies (preferably on a virtual environment) run the following command.
 ```
 >> pip install -r requirements.txt
 ```
