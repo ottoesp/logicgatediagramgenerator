@@ -7,8 +7,12 @@ This repo includes both the django website and diagram generating module.
 * Control the maximum width (in gates/variables) of diagrams to fit your needs
 ## Get Started
 ### Using via the website
-This tool is currently hosted at https://ottoesp.pythonanywhere.com/
+This tool is currently hosted at https://generator.ottoesperson.com
 ### Running the server
+To install requirments (preferably on a virtual environment) run the following command.
+```
+>> pip install -r requirements.txt
+```
 To run the django server, cd into the root directory and run the following command
 ```
 >> python manage.py runserver
@@ -17,3 +21,4 @@ To run the django server, cd into the root directory and run the following comma
 Run the file ```logicgatediagramgenerator/diagramGenerator/profiler.py "<Logical Sentence>"  <Maximum node width>``` modify this to supress profiler information 
 ## TODO
 * Stretch goal might be to make variables selectable such that you can turn them on and off and have the truthiness flow through the diagram
+* Add multiple tilesets including strictly ascii
