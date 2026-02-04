@@ -84,25 +84,41 @@
             </div>
             <div class="col-12">
                 <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">
-                            Context Free Grammar Inspired Parsing
-                        </h3>
-                        <p class="card-text">
-                            The first stage of the algorithm parses logical sentence into a structured parse tree using
-                            a two-stage approach.
-                        </p>
-                        <p class="card-text">
-                            First, the input string is tokenized character by character into variables, operators (and,
-                            or, not, xor), and parentheses. The parser then performs a recursive descent pass that scans
-                            tokens to locate the weakest binding operator that is not enclosed by parenthesis.
-                        </p>
-                        <p class="card-text">
-                            Then the expression is recursively divided at this weakest bound operator to construct
-                            binary or unary tree nodes. The result is a recursive tree representation of the logical
-                            sentence. This tree is then processed, grouping individual variables at the leaf nodes as
-                            unique objects forming a directed acyclic graph (DAG). </p>
+                    <div class="row g-0 justify-content-center">
+
+                        <div class="col-12 col-lg-8">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    Context Free Grammar Inspired Parsing
+                                </h3>
+                                <p class="card-text">
+                                    The first stage of the algorithm parses logical sentence into a structured parse
+                                    tree using
+                                    a two-stage approach.
+                                </p>
+                                <p class="card-text">
+                                    First, the input string is tokenized character by character into variables,
+                                    operators (and,
+                                    or, not, xor), and parentheses. The parser then performs a recursive descent pass
+                                    that scans
+                                    tokens to locate the weakest binding operator that is not enclosed by parenthesis.
+                                </p>
+                                <p class="card-text">
+                                    Then the expression is recursively divided at this weakest bound operator to
+                                    construct
+                                    binary or unary tree nodes. The result is a recursive tree representation of the
+                                    logical
+                                    sentence. This tree is then processed, grouping individual variables at the leaf
+                                    nodes as
+                                    unique objects forming a directed acyclic graph (DAG). </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 d-flex align-items-center justify-content-center">
+                            {% load static %}
+                            <img src="static/resources/parse_tree_dag.svg" class="img-fluid" />
+                        </div>
                     </div>
+
                 </div>
             </div>
             <div class="col-12">
@@ -111,7 +127,8 @@
                         <h3 class="card-title">
                             Layered Graph Drawing Algorithm </h3>
                         <p class="card-text">
-                            Inspired by <a href="https://en.wikipedia.org/wiki/Layered_graph_drawing">this algorithm</a>,
+                            Inspired by <a href="https://en.wikipedia.org/wiki/Layered_graph_drawing">this
+                                algorithm</a>,
                             the layered graph drawing algorithm assigns nodes of the DAG to horizontal layers while
                             respecting width constraints and minimizing visual clutter.
                         </p>
